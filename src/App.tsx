@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { RoleProvider } from "@/contexts/RoleContext";
 import { AdminLayout } from "@/components/AdminLayout";
-import AdminDashboard from "@/pages/AdminDashboard";
+import RoleDashboard from "@/pages/RoleDashboard";
 import CompaniesPage from "@/pages/CompaniesPage";
 import MethodologyPage from "@/pages/MethodologyPage";
 import FeatureFlagsPage from "@/pages/FeatureFlagsPage";
@@ -25,7 +25,7 @@ const App = () => (
         <BrowserRouter>
           <AdminLayout>
             <Routes>
-              <Route path="/" element={<AdminDashboard />} />
+              <Route path="/" element={<RoleDashboard />} />
               <Route path="/companies" element={<CompaniesPage />} />
               <Route path="/methodology" element={<MethodologyPage />} />
               <Route path="/feature-flags" element={<FeatureFlagsPage />} />
