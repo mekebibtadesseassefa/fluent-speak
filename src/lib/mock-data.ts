@@ -93,6 +93,55 @@ export const defaultFeatureFlags: FeatureFlag[] = [
   { id: '5', name: 'Maintenance Mode', description: 'Show maintenance page to all non-admin users.', enabled: false },
 ];
 
+// ─── Content Frameworks ───
+export interface ContentFramework {
+  id: string;
+  name: string;
+  description: string;
+  sourceType: string;
+  active: boolean;
+  itemCount: number;
+  color: string;
+}
+
+export const contentFrameworks: ContentFramework[] = [
+  { id: '1', name: 'Fluent with TED', description: 'TED Talks curated for language learners across all levels.', sourceType: 'TED / YouTube', active: true, itemCount: 42, color: 'bg-destructive' },
+  { id: '2', name: 'Fluent with News', description: 'Current affairs from global outlets for topical discussion.', sourceType: 'NewsAPI / Guardian', active: true, itemCount: 28, color: 'bg-primary' },
+  { id: '3', name: 'Fluent with Global South', description: 'Perspectives from Africa, Latin America, and Asia.', sourceType: 'RSS / Manual', active: true, itemCount: 15, color: 'bg-success' },
+  { id: '4', name: 'Fluent with Business', description: 'Professional and corporate communication content.', sourceType: 'HBR / Manual', active: true, itemCount: 22, color: 'bg-accent' },
+  { id: '5', name: 'Fluent with Culture', description: 'Arts, music, cinema, and cultural identity.', sourceType: 'Manual', active: false, itemCount: 8, color: 'bg-admin' },
+  { id: '6', name: 'Fluent with Science', description: 'Science communication and environmental topics.', sourceType: 'Manual', active: false, itemCount: 5, color: 'bg-navy' },
+];
+
+// ─── Content Items (Approval Queue) ───
+export interface ContentItem {
+  id: string;
+  title: string;
+  framework: string;
+  language: string;
+  levelRange: string;
+  perspective: string;
+  status: 'draft' | 'review' | 'published' | 'archived';
+  curator: string;
+  submittedAt: string;
+  publishedWeek: number;
+  publishedYear: number;
+  durationSeconds: number;
+  sourceUrl: string;
+  topicTags: string[];
+}
+
+export const contentItems: ContentItem[] = [
+  { id: '1', title: 'The Power of Vulnerability', framework: 'Fluent with TED', language: 'EN', levelRange: 'B1–C1', perspective: 'global_north', status: 'review', curator: 'Content Admin', submittedAt: '2026-02-18', publishedWeek: 9, publishedYear: 2026, durationSeconds: 1212, sourceUrl: 'https://ted.com/talks/brene_brown_the_power_of_vulnerability', topicTags: ['psychology', 'leadership'] },
+  { id: '2', title: 'How Great Leaders Inspire Action', framework: 'Fluent with TED', language: 'EN', levelRange: 'B2–C2', perspective: 'global_north', status: 'review', curator: 'Maria C.', submittedAt: '2026-02-17', publishedWeek: 9, publishedYear: 2026, durationSeconds: 1098, sourceUrl: 'https://ted.com/talks/simon_sinek_how_great_leaders_inspire_action', topicTags: ['leadership', 'business'] },
+  { id: '3', title: 'Climate Justice in the Global South', framework: 'Fluent with Global South', language: 'EN', levelRange: 'B1–B2', perspective: 'global_south', status: 'review', curator: 'João P.', submittedAt: '2026-02-16', publishedWeek: 10, publishedYear: 2026, durationSeconds: 840, sourceUrl: 'https://example.com/climate-justice', topicTags: ['climate', 'justice'] },
+  { id: '4', title: 'Negociação em Contextos Interculturais', framework: 'Fluent with Business', language: 'PT', levelRange: 'B2–C1', perspective: 'neutral', status: 'published', curator: 'Content Admin', submittedAt: '2026-02-10', publishedWeek: 8, publishedYear: 2026, durationSeconds: 960, sourceUrl: 'https://example.com/negociacao', topicTags: ['negotiation', 'culture'] },
+  { id: '5', title: 'The Danger of a Single Story', framework: 'Fluent with TED', language: 'EN', levelRange: 'A2–B2', perspective: 'global_south', status: 'published', curator: 'Maria C.', submittedAt: '2026-02-08', publishedWeek: 8, publishedYear: 2026, durationSeconds: 1140, sourceUrl: 'https://ted.com/talks/chimamanda_ngozi_adichie_the_danger_of_a_single_story', topicTags: ['identity', 'storytelling'] },
+  { id: '6', title: "L'art de la conversation", framework: 'Fluent with Culture', language: 'FR', levelRange: 'B1–C1', perspective: 'global_north', status: 'draft', curator: 'João P.', submittedAt: '2026-02-19', publishedWeek: 10, publishedYear: 2026, durationSeconds: 720, sourceUrl: 'https://example.com/conversation-art', topicTags: ['culture', 'communication'] },
+  { id: '7', title: 'Renewable Energy Breakthroughs 2026', framework: 'Fluent with News', language: 'EN', levelRange: 'B2–C2', perspective: 'neutral', status: 'published', curator: 'Content Admin', submittedAt: '2026-02-05', publishedWeek: 7, publishedYear: 2026, durationSeconds: 480, sourceUrl: 'https://example.com/renewable-2026', topicTags: ['science', 'energy'] },
+  { id: '8', title: 'Migración y Resiliencia', framework: 'Fluent with Global South', language: 'ES', levelRange: 'B1–B2', perspective: 'global_south', status: 'review', curator: 'Maria C.', submittedAt: '2026-02-19', publishedWeek: 10, publishedYear: 2026, durationSeconds: 900, sourceUrl: 'https://example.com/migracion', topicTags: ['migration', 'resilience'] },
+];
+
 // ─── Audit Log ───
 export interface AuditEntry {
   id: string;

@@ -10,6 +10,7 @@ import CompaniesPage from "@/pages/CompaniesPage";
 import MethodologyPage from "@/pages/MethodologyPage";
 import FeatureFlagsPage from "@/pages/FeatureFlagsPage";
 import AuditLogPage from "@/pages/AuditLogPage";
+import ContentManagementPage from "@/pages/ContentManagementPage";
 import PlaceholderPage from "@/pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -29,7 +30,7 @@ const App = () => (
               <Route path="/methodology" element={<MethodologyPage />} />
               <Route path="/feature-flags" element={<FeatureFlagsPage />} />
               <Route path="/audit-log" element={<AuditLogPage />} />
-              <Route path="/content" element={<PlaceholderPage title="Content Management" description="Content approval queue, publishing calendar, and framework management. Coming in Phase 1 iteration." />} />
+              <Route path="/content" element={<ContentManagementPage />} />
               <Route path="/analytics" element={<PlaceholderPage title="Analytics" description="Platform analytics, social impact metrics, and reporting dashboards." />} />
               <Route path="/settings" element={<PlaceholderPage title="Settings" description="Platform configuration, permission matrix, and system preferences." />} />
               <Route path="/verification" element={<PlaceholderPage title="User Verification" description="CPF/CNPJ verification queue for Ops admins." />} />
