@@ -142,6 +142,32 @@ export const contentItems: ContentItem[] = [
   { id: '8', title: 'Migración y Resiliencia', framework: 'Fluent with Global South', language: 'ES', levelRange: 'B1–B2', perspective: 'global_south', status: 'review', curator: 'Maria C.', submittedAt: '2026-02-19', publishedWeek: 10, publishedYear: 2026, durationSeconds: 900, sourceUrl: 'https://example.com/migracion', topicTags: ['migration', 'resilience'] },
 ];
 
+// ─── Employees (mock per company) ───
+export interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  companyId: string;
+  level: string;
+  status: 'active' | 'invited' | 'inactive';
+  joinedAt: string;
+}
+
+export const employees: Employee[] = [
+  { id: 'e1', name: 'Ana Souza', email: 'ana@techbrasil.com', companyId: '1', level: 'B2', status: 'active', joinedAt: '2025-06-10' },
+  { id: 'e2', name: 'Pedro Lima', email: 'pedro@techbrasil.com', companyId: '1', level: 'B1', status: 'active', joinedAt: '2025-07-15' },
+  { id: 'e3', name: 'Carla Mendes', email: 'carla@techbrasil.com', companyId: '1', level: 'C1', status: 'invited', joinedAt: '2026-01-20' },
+  { id: 'e4', name: 'Lucas Ferreira', email: 'lucas@globalcorp.com', companyId: '2', level: 'A2', status: 'active', joinedAt: '2025-09-01' },
+  { id: 'e5', name: 'Julia Costa', email: 'julia@globalcorp.com', companyId: '2', level: 'B1', status: 'active', joinedAt: '2025-10-05' },
+  { id: 'e6', name: 'Rafael Dias', email: 'rafael@globalcorp.com', companyId: '2', level: 'B2', status: 'inactive', joinedAt: '2025-08-12' },
+  { id: 'e7', name: 'Beatriz Alves', email: 'bia@innovatech.com', companyId: '3', level: 'C1', status: 'active', joinedAt: '2025-11-01' },
+  { id: 'e8', name: 'Thiago Rocha', email: 'thiago@innovatech.com', companyId: '3', level: 'B2', status: 'active', joinedAt: '2025-12-10' },
+  { id: 'e9', name: 'Mariana Nunes', email: 'mariana@edustart.com', companyId: '4', level: 'A2', status: 'invited', joinedAt: '2026-01-05' },
+  { id: 'e10', name: 'Gabriel Santos', email: 'gabriel@financeone.com', companyId: '5', level: 'B1', status: 'active', joinedAt: '2025-05-20' },
+  { id: 'e11', name: 'Isabela Martins', email: 'isabela@financeone.com', companyId: '5', level: 'C2', status: 'active', joinedAt: '2025-04-15' },
+  { id: 'e12', name: 'Fernando Oliveira', email: 'fernando@financeone.com', companyId: '5', level: 'B2', status: 'active', joinedAt: '2025-06-01' },
+];
+
 // ─── Audit Log ───
 export interface AuditEntry {
   id: string;
