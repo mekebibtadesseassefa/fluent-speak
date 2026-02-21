@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { companies, type Company } from '@/lib/mock-data';
 import { Search, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import CompanyDetailDialog from '@/components/CompanyDetailDialog';
 
 const statusColors: Record<string, string> = {
   active: 'bg-success text-success-foreground',
@@ -18,12 +19,20 @@ const statusColors: Record<string, string> = {
 export default function CompaniesPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [actionType, setActionType] = useState<'view' | 'override' | 'suspend' | 'terminate'>('view');
 
   const filtered = companies.filter((c) => {
     if (statusFilter !== 'all' && c.status !== statusFilter) return false;
     if (search && !c.name.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
+
+  const openCompany = (company: Company) => {
+    setSelectedCompany(company);
+    setDialogOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -65,7 +74,7 @@ export default function CompaniesPage() {
             </TableHeader>
             <TableBody>
               {filtered.map((c) => (
-                <TableRow key={c.id}>
+                <TableRow key={c.id} className="cursor-pointer" onClick={() => openCompany(c)}>
                   <TableCell className="font-medium">{c.name}</TableCell>
                   <TableCell className="text-muted-foreground text-xs font-mono">{c.cnpj}</TableCell>
                   <TableCell>{c.plan}</TableCell>
@@ -77,14 +86,14 @@ export default function CompaniesPage() {
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                         <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Override Plan</DropdownMenuItem>
-                        <DropdownMenuItem>Suspend</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">Terminate</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openCompany(c)}>View</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openCompany(c)}>Override Plan</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openCompany(c)}>Suspend</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" onClick={() => openCompany(c)}>Terminate</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -94,6 +103,12 @@ export default function CompaniesPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <CompanyDetailDialog
+        company={selectedCompany}
+        open={dialogOpen}
+        onClose={() => { setDialogOpen(false); setSelectedCompany(null); }}
+      />
     </div>
   );
 }
