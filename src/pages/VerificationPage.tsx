@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Shield, UserCheck, UserX } from 'lucide-react';
@@ -19,6 +20,7 @@ const initialQueue = [
 export default function VerificationPage() {
   const { toast } = useToast();
   const [queue, setQueue] = useState(initialQueue);
+  const [rejectReason, setRejectReason] = useState('');
 
   const handleApprove = (id: string, name: string) => {
     setQueue((q) => q.filter((v) => v.id !== id));
@@ -27,7 +29,8 @@ export default function VerificationPage() {
 
   const handleReject = (id: string, name: string) => {
     setQueue((q) => q.filter((v) => v.id !== id));
-    toast({ title: 'Rejected', description: `${name}'s verification was rejected.`, variant: 'destructive' });
+    toast({ title: 'Rejected', description: `${name}'s verification was rejected.${rejectReason ? ` Reason: ${rejectReason}` : ''}`, variant: 'destructive' });
+    setRejectReason('');
   };
 
   return (
@@ -104,8 +107,14 @@ export default function VerificationPage() {
                               This will reject <span className="font-semibold">{v.name}</span>'s {v.type} verification. They will need to resubmit their documents.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
+                          <Textarea
+                            placeholder="Reason for rejection (optional)..."
+                            value={rejectReason}
+                            onChange={(e) => setRejectReason(e.target.value)}
+                            className="min-h-[80px]"
+                          />
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel onClick={() => setRejectReason('')}>Cancel</AlertDialogCancel>
                             <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => handleReject(v.id, v.name)}>Reject</AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
