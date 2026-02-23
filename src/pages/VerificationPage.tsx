@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Shield, UserCheck, UserX } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-const verificationQueue = [
+const initialQueue = [
   { id: '1', name: 'Carlos Mendes', cpf: '***.456.789-**', type: 'CPF', submitted: '2 hrs ago', status: 'pending' },
   { id: '2', name: 'TechBrasil Ltda', cpf: '12.345.678/0001-**', type: 'CNPJ', submitted: '5 hrs ago', status: 'pending' },
   { id: '3', name: 'Ana Oliveira', cpf: '***.123.456-**', type: 'CPF', submitted: '1 day ago', status: 'pending' },
@@ -14,11 +16,24 @@ const verificationQueue = [
 ];
 
 export default function VerificationPage() {
+  const { toast } = useToast();
+  const [queue, setQueue] = useState(initialQueue);
+
+  const handleApprove = (id: string, name: string) => {
+    setQueue((q) => q.filter((v) => v.id !== id));
+    toast({ title: 'Approved', description: `${name} has been verified successfully.` });
+  };
+
+  const handleReject = (id: string, name: string) => {
+    setQueue((q) => q.filter((v) => v.id !== id));
+    toast({ title: 'Rejected', description: `${name}'s verification was rejected.`, variant: 'destructive' });
+  };
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-navy">User Verification</h1>
-        <p className="text-sm text-muted-foreground">CPF/CNPJ verification queue — {verificationQueue.length} pending.</p>
+        <p className="text-sm text-muted-foreground">CPF/CNPJ verification queue — {queue.length} pending.</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -26,7 +41,7 @@ export default function VerificationPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <Shield className="h-8 w-8 text-accent" />
             <div>
-              <p className="text-2xl font-bold">{verificationQueue.length}</p>
+              <p className="text-2xl font-bold">{queue.length}</p>
               <p className="text-xs text-muted-foreground">Pending</p>
             </div>
           </CardContent>
@@ -68,7 +83,7 @@ export default function VerificationPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {verificationQueue.map((v) => (
+              {queue.map((v) => (
                 <TableRow key={v.id}>
                   <TableCell className="font-medium">{v.name}</TableCell>
                   <TableCell className="text-muted-foreground font-mono text-xs">{v.cpf}</TableCell>
@@ -76,12 +91,15 @@ export default function VerificationPage() {
                   <TableCell className="text-xs text-muted-foreground">{v.submitted}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button size="sm" variant="outline" className="h-7 text-xs text-success border-success/30 hover:bg-success/10"><UserCheck className="h-3 w-3 mr-1" />Approve</Button>
-                      <Button size="sm" variant="outline" className="h-7 text-xs text-destructive border-destructive/30 hover:bg-destructive/10"><UserX className="h-3 w-3 mr-1" />Reject</Button>
+                      <Button size="sm" variant="outline" className="h-7 text-xs text-success border-success/30 hover:bg-success/10" onClick={() => handleApprove(v.id, v.name)}><UserCheck className="h-3 w-3 mr-1" />Approve</Button>
+                      <Button size="sm" variant="outline" className="h-7 text-xs text-destructive border-destructive/30 hover:bg-destructive/10" onClick={() => handleReject(v.id, v.name)}><UserX className="h-3 w-3 mr-1" />Reject</Button>
                     </div>
                   </TableCell>
                 </TableRow>
               ))}
+              {queue.length === 0 && (
+                <TableRow><TableCell colSpan={5} className="text-center py-8 text-muted-foreground">All verifications processed!</TableCell></TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
