@@ -10,6 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import {
   CheckCircle, XCircle, Eye, Search, Clock, FileText, Globe, Calendar as CalendarIcon, Layers, ChevronLeft, ChevronRight,
 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { contentItems, contentFrameworks, type ContentItem } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
 
@@ -100,7 +101,23 @@ function ApprovalQueue() {
                       {item.status === 'review' && (
                         <>
                           <Button size="icon" variant="ghost" className="h-7 w-7 text-success hover:text-success" onClick={() => handleApprove(item.id, item.title)}><CheckCircle className="h-3.5 w-3.5" /></Button>
-                          <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleReject(item.id, item.title)}><XCircle className="h-3.5 w-3.5" /></Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive"><XCircle className="h-3.5 w-3.5" /></Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Reject this content?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  "<span className="font-semibold">{item.title}</span>" will be sent back to draft. The curator will need to revise and resubmit.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => handleReject(item.id, item.title)}>Reject</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </>
                       )}
                     </div>
