@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,7 @@ import {
   CheckCircle, XCircle, Eye, Search, Clock, FileText, Globe, Calendar as CalendarIcon, Layers, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { contentItems, contentFrameworks, type ContentItem } from '@/lib/mock-data';
+import { useToast } from '@/hooks/use-toast';
 
 const STATUS_BADGE: Record<ContentItem['status'], { label: string; className: string }> = {
   draft: { label: 'Draft', className: 'bg-muted text-muted-foreground' },
@@ -30,8 +31,20 @@ function formatDuration(s: number) {
 function ApprovalQueue() {
   const [filter, setFilter] = useState<string>('review');
   const [search, setSearch] = useState('');
+  const [items, setItems] = useState(contentItems);
+  const { toast } = useToast();
 
-  const filtered = contentItems.filter((item) => {
+  const handleApprove = useCallback((id: string, title: string) => {
+    setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: 'published' as const } : i));
+    toast({ title: 'Content Approved', description: `"${title}" has been published.` });
+  }, [toast]);
+
+  const handleReject = useCallback((id: string, title: string) => {
+    setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: 'draft' as const } : i));
+    toast({ title: 'Content Rejected', description: `"${title}" was sent back to draft.`, variant: 'destructive' });
+  }, [toast]);
+
+  const filtered = items.filter((item) => {
     if (filter !== 'all' && item.status !== filter) return false;
     if (search && !item.title.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
@@ -86,8 +99,8 @@ function ApprovalQueue() {
                       <Button size="icon" variant="ghost" className="h-7 w-7"><Eye className="h-3.5 w-3.5" /></Button>
                       {item.status === 'review' && (
                         <>
-                          <Button size="icon" variant="ghost" className="h-7 w-7 text-success hover:text-success"><CheckCircle className="h-3.5 w-3.5" /></Button>
-                          <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive"><XCircle className="h-3.5 w-3.5" /></Button>
+                          <Button size="icon" variant="ghost" className="h-7 w-7 text-success hover:text-success" onClick={() => handleApprove(item.id, item.title)}><CheckCircle className="h-3.5 w-3.5" /></Button>
+                          <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleReject(item.id, item.title)}><XCircle className="h-3.5 w-3.5" /></Button>
                         </>
                       )}
                     </div>
