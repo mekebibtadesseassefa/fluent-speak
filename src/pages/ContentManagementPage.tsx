@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import {
   CheckCircle, XCircle, Eye, Search, Clock, FileText, Globe, Calendar as CalendarIcon, Layers, ChevronLeft, ChevronRight,
 } from 'lucide-react';
@@ -33,6 +34,7 @@ function ApprovalQueue() {
   const [filter, setFilter] = useState<string>('review');
   const [search, setSearch] = useState('');
   const [items, setItems] = useState(contentItems);
+  const [rejectReason, setRejectReason] = useState('');
   const { toast } = useToast();
 
   const handleApprove = useCallback((id: string, title: string) => {
@@ -42,8 +44,9 @@ function ApprovalQueue() {
 
   const handleReject = useCallback((id: string, title: string) => {
     setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: 'draft' as const } : i));
-    toast({ title: 'Content Rejected', description: `"${title}" was sent back to draft.`, variant: 'destructive' });
-  }, [toast]);
+    toast({ title: 'Content Rejected', description: `"${title}" was sent back to draft.${rejectReason ? ` Reason: ${rejectReason}` : ''}`, variant: 'destructive' });
+    setRejectReason('');
+  }, [toast, rejectReason]);
 
   const filtered = items.filter((item) => {
     if (filter !== 'all' && item.status !== filter) return false;
@@ -112,8 +115,14 @@ function ApprovalQueue() {
                                   "<span className="font-semibold">{item.title}</span>" will be sent back to draft. The curator will need to revise and resubmit.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
+                              <Textarea
+                                placeholder="Reason for rejection (optional)..."
+                                value={rejectReason}
+                                onChange={(e) => setRejectReason(e.target.value)}
+                                className="min-h-[80px]"
+                              />
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel onClick={() => setRejectReason('')}>Cancel</AlertDialogCancel>
                                 <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => handleReject(item.id, item.title)}>Reject</AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
