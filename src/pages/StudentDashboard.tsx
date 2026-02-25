@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, Calendar, Flame, Clock, TrendingUp, Mic } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import StudentOnboardingWizard from './StudentOnboardingWizard';
 
 interface ContentItem {
   id: string;
@@ -18,35 +19,42 @@ interface ContentItem {
   framework: { name: string; color: string | null } | null;
 }
 
-interface UpcomingClass {
-  id: string;
-  scheduled_at: string;
-  language: string;
-  type: string;
-  teacher: { full_name: string } | null;
-  booking: { agenda_text: string | null; agenda_submitted_at: string | null } | null;
-}
-
 const LANG_FLAGS: Record<string, string> = { en: '🇺🇸', es: '🇪🇸', fr: '🇫🇷', pt: '🇧🇷' };
 
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [weeklyContent, setWeeklyContent] = useState<ContentItem[]>([]);
-  const [upcomingClasses, setUpcomingClasses] = useState<UpcomingClass[]>([]);
   const [reflections, setReflections] = useState<{ confidence_score: number }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [onboardingComplete, setOnboardingComplete] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!user) return;
-    loadData();
+    checkOnboarding();
   }, [user]);
+
+  const checkOnboarding = async () => {
+    const { data } = await supabase
+      .from('student_preferences')
+      .select('onboarding_complete')
+      .eq('user_id', user!.id)
+      .maybeSingle();
+
+    if (!data || !data.onboarding_complete) {
+      setOnboardingComplete(false);
+      setLoading(false);
+    } else {
+      setOnboardingComplete(true);
+      loadData();
+    }
+  };
 
   const loadData = async () => {
     const now = new Date();
     const currentWeek = getISOWeek(now);
     const currentYear = now.getFullYear();
 
-    const [contentRes, classesRes, reflectionsRes] = await Promise.all([
+    const [contentRes, reflectionsRes] = await Promise.all([
       supabase
         .from('content_items')
         .select('id, title, language, level_min, level_max, duration_seconds, status, content_frameworks(name, color)')
@@ -54,13 +62,6 @@ export default function StudentDashboard() {
         .eq('published_year', currentYear)
         .eq('published_week', currentWeek)
         .limit(5),
-      supabase
-        .from('class_bookings')
-        .select('id, classes(id, scheduled_at, language, type, teachers(id, profiles(full_name))), agenda_text, agenda_submitted_at')
-        .eq('student_id', user!.id)
-        .is('cancelled_at', null)
-        .order('created_at', { ascending: false })
-        .limit(3),
       supabase
         .from('session_reflections')
         .select('confidence_score')
@@ -97,6 +98,18 @@ export default function StudentDashboard() {
 
   if (loading) {
     return <div className="p-6 text-muted-foreground">Loading your dashboard...</div>;
+  }
+
+  // Show onboarding wizard if not completed
+  if (onboardingComplete === false) {
+    return (
+      <StudentOnboardingWizard
+        onComplete={() => {
+          setOnboardingComplete(true);
+          loadData();
+        }}
+      />
+    );
   }
 
   return (
