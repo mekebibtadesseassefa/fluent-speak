@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, BookOpen, Play } from 'lucide-react';
+import { Search, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const LANG_FLAGS: Record<string, string> = { en: '🇺🇸', es: '🇪🇸', fr: '🇫🇷', pt: '🇧🇷' };
+
+// Map onboarding content_stream ids to framework names for filtering
+const STREAM_TO_FRAMEWORK: Record<string, string> = {
+  ted: 'Fluent with TED',
+  news: 'Fluent with News',
+  global_south: 'Fluent with Global South',
+  business: 'Fluent with Business',
+  culture: 'Fluent with Culture',
+  science: 'Fluent with Science',
+};
 
 interface ContentRow {
   id: string;
@@ -26,17 +37,35 @@ interface ContentRow {
 }
 
 export default function StudentContentFeed() {
+  const { user } = useAuth();
   const [content, setContent] = useState<ContentRow[]>([]);
   const [search, setSearch] = useState('');
   const [langFilter, setLangFilter] = useState('all');
+  const [prefLanguages, setPrefLanguages] = useState<string[]>([]);
+  const [prefStreams, setPrefStreams] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadContent();
-  }, []);
+    if (user) {
+      loadPreferencesAndContent();
+    }
+  }, [user]);
 
-  const loadContent = async () => {
-    const { data } = await supabase
+  const loadPreferencesAndContent = async () => {
+    // Load preferences first
+    const { data: prefs } = await supabase
+      .from('student_preferences')
+      .select('languages, content_streams')
+      .eq('user_id', user!.id)
+      .maybeSingle();
+
+    const langs = prefs?.languages ?? [];
+    const streams = prefs?.content_streams ?? [];
+    setPrefLanguages(langs);
+    setPrefStreams(streams);
+
+    // Build query — filter by preferred languages if any
+    let query = supabase
       .from('content_items')
       .select('id, title, language, level_min, level_max, duration_seconds, status, perspective, topic_tags, published_week, published_year, content_frameworks(name, color)')
       .eq('status', 'published')
@@ -44,7 +73,24 @@ export default function StudentContentFeed() {
       .order('published_week', { ascending: false })
       .limit(50);
 
-    if (data) setContent(data as ContentRow[]);
+    if (langs.length > 0) {
+      query = query.in('language', langs);
+    }
+
+    const { data } = await query;
+    if (data) {
+      // Client-side filter by preferred content streams/frameworks
+      let items = data as ContentRow[];
+      if (streams.length > 0) {
+        const preferredNames = streams.map(s => STREAM_TO_FRAMEWORK[s]).filter(Boolean);
+        if (preferredNames.length > 0) {
+          items = items.filter(item =>
+            !item.content_frameworks || preferredNames.includes(item.content_frameworks.name)
+          );
+        }
+      }
+      setContent(items);
+    }
     setLoading(false);
   };
 
@@ -69,7 +115,7 @@ export default function StudentContentFeed() {
         <Select value={langFilter} onValueChange={setLangFilter}>
           <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Languages</SelectItem>
+            <SelectItem value="all">{prefLanguages.length > 0 ? 'My Languages' : 'All Languages'}</SelectItem>
             <SelectItem value="en">English</SelectItem>
             <SelectItem value="es">Español</SelectItem>
             <SelectItem value="fr">Français</SelectItem>
@@ -77,6 +123,14 @@ export default function StudentContentFeed() {
           </SelectContent>
         </Select>
       </div>
+      {prefStreams.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          <span className="text-xs text-muted-foreground mr-1">Streams:</span>
+          {prefStreams.map(s => (
+            <Badge key={s} variant="secondary" className="text-xs capitalize">{s.replace('_', ' ')}</Badge>
+          ))}
+        </div>
+      )}
 
       {loading ? (
         <p className="text-muted-foreground">Loading content...</p>
