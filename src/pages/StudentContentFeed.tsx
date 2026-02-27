@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Search, Play } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
 
 const LANG_FLAGS: Record<string, string> = { en: '🇺🇸', es: '🇪🇸', fr: '🇫🇷', pt: '🇧🇷' };
@@ -43,13 +45,14 @@ export default function StudentContentFeed() {
   const [langFilter, setLangFilter] = useState('all');
   const [prefLanguages, setPrefLanguages] = useState<string[]>([]);
   const [prefStreams, setPrefStreams] = useState<string[]>([]);
+  const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
       loadPreferencesAndContent();
     }
-  }, [user]);
+  }, [user, showAll]);
 
   const loadPreferencesAndContent = async () => {
     // Load preferences first
@@ -73,15 +76,14 @@ export default function StudentContentFeed() {
       .order('published_week', { ascending: false })
       .limit(50);
 
-    if (langs.length > 0) {
+    if (!showAll && langs.length > 0) {
       query = query.in('language', langs);
     }
 
     const { data } = await query;
     if (data) {
-      // Client-side filter by preferred content streams/frameworks
       let items = data as ContentRow[];
-      if (streams.length > 0) {
+      if (!showAll && streams.length > 0) {
         const preferredNames = streams.map(s => STREAM_TO_FRAMEWORK[s]).filter(Boolean);
         if (preferredNames.length > 0) {
           items = items.filter(item =>
@@ -123,12 +125,19 @@ export default function StudentContentFeed() {
           </SelectContent>
         </Select>
       </div>
-      {prefStreams.length > 0 && (
+      {prefStreams.length > 0 && !showAll && (
         <div className="flex flex-wrap gap-1.5">
           <span className="text-xs text-muted-foreground mr-1">Streams:</span>
           {prefStreams.map(s => (
             <Badge key={s} variant="secondary" className="text-xs capitalize">{s.replace('_', ' ')}</Badge>
           ))}
+        </div>
+      )}
+
+      {(prefLanguages.length > 0 || prefStreams.length > 0) && (
+        <div className="flex items-center gap-2">
+          <Switch id="show-all" checked={showAll} onCheckedChange={setShowAll} />
+          <Label htmlFor="show-all" className="text-sm cursor-pointer">Show all content</Label>
         </div>
       )}
 
