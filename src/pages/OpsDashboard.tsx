@@ -45,8 +45,8 @@ export default function OpsDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Pending Verifications', value: verificationQueue.length, icon: Shield, color: 'text-accent' },
-          { label: 'Teachers Onboarding', value: teacherOnboarding.filter(t => t.stage !== 'Active').length, icon: Users, color: 'text-admin' },
-          { label: 'Active Teachers', value: teacherOnboarding.filter(t => t.stage === 'Active').length, icon: UserCheck, color: 'text-success' },
+          { label: 'Facilitators Onboarding', value: facilitatorOnboarding.filter(t => t.stage !== 'Active').length, icon: Users, color: 'text-admin' },
+          { label: 'Active Facilitators', value: facilitatorOnboarding.filter(t => t.stage === 'Active').length, icon: UserCheck, color: 'text-success' },
           { label: 'Groups at Capacity', value: classCapacity.filter(c => c.enrolled >= c.capacity).length, icon: AlertTriangle, color: 'text-destructive' },
         ].map((m) => (
           <Card key={m.label}>
