@@ -38,7 +38,7 @@ export default function OpsDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-navy">Operations Dashboard</h1>
-        <p className="text-sm text-muted-foreground">User verification, teacher onboarding, and class capacity management.</p>
+        <p className="text-sm text-muted-foreground">User verification, facilitator onboarding, and class capacity management.</p>
       </div>
 
       {/* Metric cards */}
