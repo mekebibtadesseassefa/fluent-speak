@@ -29,7 +29,7 @@ export const recentActivity = [
   { id: '3', time: '1 hr ago', text: 'Subscription cancelled: João Silva (Individual Basic)', type: 'cancel' },
   { id: '4', time: '2 hrs ago', text: 'Content published: "The Power of Vulnerability" (TED)', type: 'content' },
   { id: '5', time: '3 hrs ago', text: 'Company plan upgraded: GlobalCorp → Plus', type: 'company' },
-  { id: '6', time: '4 hrs ago', text: 'New teacher application: Carlos M. (ES, PT)', type: 'teacher' },
+  { id: '6', time: '4 hrs ago', text: 'New facilitator application: Carlos M. (ES, PT)', type: 'teacher' },
   { id: '7', time: '5 hrs ago', text: 'Employee approved: Maria Santos @ InnovaTech', type: 'company' },
   { id: '8', time: '6 hrs ago', text: 'Group class auto-created: EN Intermediate (Tue 19:00)', type: 'class' },
 ];
