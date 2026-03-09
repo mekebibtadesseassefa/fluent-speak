@@ -19,7 +19,7 @@ const ROLE_LABELS: Record<AppRole, string> = {
   sub_admin_content: 'Sub-Admin Content',
   pedagogical_lead: 'Pedagogical Lead',
   content_curator: 'Content Curator',
-  teacher: 'Teacher',
+  teacher: 'Facilitator',
   student: 'Student',
   company_hr: 'Company HR',
   company_finance: 'Company Finance',
@@ -39,7 +39,7 @@ const superAdminNav = [
 const opsNav = [
   { title: 'Overview', url: '/admin', icon: LayoutDashboard },
   { title: 'User Verification', url: '/admin/verification', icon: CheckSquare },
-  { title: 'Teacher Onboarding', url: '/admin/teacher-onboarding', icon: Users },
+  { title: 'Facilitator Onboarding', url: '/admin/teacher-onboarding', icon: Users },
   { title: 'Class Capacity', url: '/admin/class-capacity', icon: Calendar },
 ];
 
@@ -64,7 +64,7 @@ const studentNav = [
   { title: 'My Classes', url: '/student/classes', icon: Mic },
 ];
 
-const teacherNav = [
+const facilitatorNav = [
   { title: 'Dashboard', url: '/teacher', icon: LayoutDashboard },
   { title: 'Schedule', url: '/teacher/schedule', icon: Calendar },
   { title: 'Student Agendas', url: '/teacher/agendas', icon: FileText },
@@ -83,7 +83,7 @@ function getNavForRole(role: AppRole | null) {
     case 'sub_admin_content': return contentNav;
     case 'content_curator': return contentNav;
     case 'pedagogical_lead': return superAdminNav;
-    case 'teacher': return teacherNav;
+    case 'teacher': return facilitatorNav;
     case 'student': return studentNav;
     case 'company_hr': return hrNav;
     case 'company_finance': return hrNav;

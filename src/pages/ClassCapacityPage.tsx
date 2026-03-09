@@ -4,12 +4,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Calendar, AlertTriangle, Users, CheckCircle } from 'lucide-react';
 
 const classCapacity = [
-  { id: '1', language: 'EN', level: 'Intermediate', day: 'Tuesday 19:00', enrolled: 10, capacity: 12, teacher: 'Amina K.' },
-  { id: '2', language: 'EN', level: 'Advanced', day: 'Thursday 19:00', enrolled: 8, capacity: 12, teacher: 'David N.' },
-  { id: '3', language: 'ES', level: 'Beginner', day: 'Wednesday 18:00', enrolled: 12, capacity: 12, teacher: 'Carlos M.' },
-  { id: '4', language: 'FR', level: 'Intermediate', day: 'Monday 19:00', enrolled: 5, capacity: 12, teacher: 'Fatima R.' },
-  { id: '5', language: 'EN', level: 'Beginner', day: 'Monday 18:00', enrolled: 9, capacity: 12, teacher: 'David N.' },
-  { id: '6', language: 'PT', level: 'Intermediate', day: 'Friday 17:00', enrolled: 11, capacity: 12, teacher: 'Carlos M.' },
+  { id: '1', language: 'EN', level: 'Intermediate', day: 'Tuesday 19:00', enrolled: 10, capacity: 12, facilitator: 'Amina K.' },
+  { id: '2', language: 'EN', level: 'Advanced', day: 'Thursday 19:00', enrolled: 8, capacity: 12, facilitator: 'David N.' },
+  { id: '3', language: 'ES', level: 'Beginner', day: 'Wednesday 18:00', enrolled: 12, capacity: 12, facilitator: 'Carlos M.' },
+  { id: '4', language: 'FR', level: 'Intermediate', day: 'Monday 19:00', enrolled: 5, capacity: 12, facilitator: 'Fatima R.' },
+  { id: '5', language: 'EN', level: 'Beginner', day: 'Monday 18:00', enrolled: 9, capacity: 12, facilitator: 'David N.' },
+  { id: '6', language: 'PT', level: 'Intermediate', day: 'Friday 17:00', enrolled: 11, capacity: 12, facilitator: 'Carlos M.' },
 ];
 
 export default function ClassCapacityPage() {
@@ -62,7 +62,7 @@ export default function ClassCapacityPage() {
                 <TableHead>Language</TableHead>
                 <TableHead>Level</TableHead>
                 <TableHead>Schedule</TableHead>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Capacity</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
@@ -75,7 +75,7 @@ export default function ClassCapacityPage() {
                     <TableCell className="font-medium">{c.language}</TableCell>
                     <TableCell>{c.level}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{c.day}</TableCell>
-                    <TableCell className="text-xs">{c.teacher}</TableCell>
+                    <TableCell className="text-xs">{c.facilitator}</TableCell>
                     <TableCell>
                       <span className={`text-sm font-medium ${pct >= 1 ? 'text-destructive' : pct >= 0.8 ? 'text-accent' : 'text-foreground'}`}>
                         {c.enrolled}/{c.capacity}

@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { format, addHours } from 'date-fns';
 import { Calendar, User, Clock, FileText } from 'lucide-react';
 
-interface TeacherOption {
+interface FacilitatorOption {
   id: string;
   bio: string | null;
   languages_taught: string[];
@@ -31,25 +31,25 @@ export default function StudentBookingPage() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [language, setLanguage] = useState('');
-  const [teachers, setTeachers] = useState<TeacherOption[]>([]);
-  const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
+  const [facilitators, setFacilitators] = useState<FacilitatorOption[]>([]);
+  const [selectedFacilitator, setSelectedFacilitator] = useState<string | null>(null);
   const [slots, setSlots] = useState<SlotOption[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [agenda, setAgenda] = useState('');
   const [booking, setBooking] = useState(false);
 
   useEffect(() => {
-    if (step === 2 && language) loadTeachers();
-    if (step === 3 && selectedTeacher) loadSlots();
-  }, [step, language, selectedTeacher]);
+    if (step === 2 && language) loadFacilitators();
+    if (step === 3 && selectedFacilitator) loadSlots();
+  }, [step, language, selectedFacilitator]);
 
-  const loadTeachers = async () => {
+  const loadFacilitators = async () => {
     const { data } = await supabase
       .from('teachers')
       .select('id, bio, languages_taught, profiles(full_name, avatar_url)')
       .eq('active', true)
       .contains('languages_taught', [language]);
-    if (data) setTeachers(data as TeacherOption[]);
+    if (data) setFacilitators(data as FacilitatorOption[]);
   };
 
   const loadSlots = async () => {
@@ -57,7 +57,7 @@ export default function StudentBookingPage() {
     const { data } = await supabase
       .from('teacher_availability')
       .select('id, slot_date, start_time, end_time, max_students, current_bookings')
-      .eq('teacher_id', selectedTeacher!)
+      .eq('teacher_id', selectedFacilitator!)
       .eq('available', true)
       .gte('slot_date', minDate)
       .order('slot_date')
@@ -78,7 +78,7 @@ export default function StudentBookingPage() {
     const { data: cls, error: classError } = await supabase.from('classes').insert({
       type: 'private',
       language,
-      teacher_id: selectedTeacher!,
+      teacher_id: selectedFacilitator!,
       availability_slot_id: selectedSlot,
       scheduled_at: `${slot.slot_date}T${slot.start_time}`,
       capacity: 1,
@@ -107,7 +107,7 @@ export default function StudentBookingPage() {
     setBooking(false);
     setStep(1);
     setLanguage('');
-    setSelectedTeacher(null);
+    setSelectedFacilitator(null);
     setSelectedSlot(null);
     setAgenda('');
   };
@@ -142,21 +142,21 @@ export default function StudentBookingPage() {
       {step === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> Choose a Teacher</CardTitle>
+            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> Choose a Facilitator</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {teachers.length === 0 ? (
-              <p className="text-muted-foreground">No teachers available for this language yet.</p>
+            {facilitators.length === 0 ? (
+              <p className="text-muted-foreground">No facilitators available for this language yet.</p>
             ) : (
-              teachers.map(t => (
+              facilitators.map(t => (
                 <div
                   key={t.id}
-                  onClick={() => { setSelectedTeacher(t.id); setStep(3); }}
+                  onClick={() => { setSelectedFacilitator(t.id); setStep(3); }}
                   className={`p-4 rounded-lg border cursor-pointer transition-colors hover:border-primary/50 ${
-                    selectedTeacher === t.id ? 'border-primary bg-primary/5' : ''
+                    selectedFacilitator === t.id ? 'border-primary bg-primary/5' : ''
                   }`}
                 >
-                  <p className="font-medium">{t.profiles?.full_name || 'Teacher'}</p>
+                  <p className="font-medium">{t.profiles?.full_name || 'Facilitator'}</p>
                   <p className="text-sm text-muted-foreground">{t.bio || 'No bio available'}</p>
                   <div className="flex gap-1 mt-2">
                     {t.languages_taught.map(l => (
@@ -180,7 +180,7 @@ export default function StudentBookingPage() {
           <CardContent className="space-y-3">
             <p className="text-xs text-muted-foreground">Only slots ≥72 hours from now are shown (agenda submission requirement).</p>
             {slots.length === 0 ? (
-              <p className="text-muted-foreground">No available slots. Please check back later or choose another teacher.</p>
+              <p className="text-muted-foreground">No available slots. Please check back later or choose another facilitator.</p>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {slots.map(s => (

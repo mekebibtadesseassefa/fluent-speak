@@ -53,8 +53,8 @@ export default function TeacherDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Teacher Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Welcome back! Here's your teaching overview.</p>
+        <h1 className="text-2xl font-bold text-navy">Facilitator Dashboard</h1>
+        <p className="text-sm text-muted-foreground">Welcome back! Here's your facilitation overview.</p>
       </div>
 
       {/* Key Metrics */}

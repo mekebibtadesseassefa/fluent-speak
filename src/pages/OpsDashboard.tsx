@@ -12,7 +12,7 @@ const verificationQueue = [
   { id: '4', name: 'Sofia Ribeiro', cpf: '***.789.012-**', type: 'CPF', submitted: '1 day ago', status: 'pending' },
 ];
 
-const teacherOnboarding = [
+const facilitatorOnboarding = [
   { id: '1', name: 'Amina K.', languages: ['EN', 'FR'], stage: 'Training', progress: 75 },
   { id: '2', name: 'Carlos M.', languages: ['ES', 'PT'], stage: 'Application Review', progress: 25 },
   { id: '3', name: 'Fatima R.', languages: ['EN', 'AR'], stage: 'Profile Complete', progress: 50 },
@@ -20,10 +20,10 @@ const teacherOnboarding = [
 ];
 
 const classCapacity = [
-  { id: '1', language: 'EN', level: 'Intermediate', day: 'Tuesday 19:00', enrolled: 10, capacity: 12, teacher: 'Amina K.' },
-  { id: '2', language: 'EN', level: 'Advanced', day: 'Thursday 19:00', enrolled: 8, capacity: 12, teacher: 'David N.' },
-  { id: '3', language: 'ES', level: 'Beginner', day: 'Wednesday 18:00', enrolled: 12, capacity: 12, teacher: 'Carlos M.' },
-  { id: '4', language: 'FR', level: 'Intermediate', day: 'Monday 19:00', enrolled: 5, capacity: 12, teacher: 'Fatima R.' },
+  { id: '1', language: 'EN', level: 'Intermediate', day: 'Tuesday 19:00', enrolled: 10, capacity: 12, facilitator: 'Amina K.' },
+  { id: '2', language: 'EN', level: 'Advanced', day: 'Thursday 19:00', enrolled: 8, capacity: 12, facilitator: 'David N.' },
+  { id: '3', language: 'ES', level: 'Beginner', day: 'Wednesday 18:00', enrolled: 12, capacity: 12, facilitator: 'Carlos M.' },
+  { id: '4', language: 'FR', level: 'Intermediate', day: 'Monday 19:00', enrolled: 5, capacity: 12, facilitator: 'Fatima R.' },
 ];
 
 const STAGE_COLOR: Record<string, string> = {
@@ -38,15 +38,15 @@ export default function OpsDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-navy">Operations Dashboard</h1>
-        <p className="text-sm text-muted-foreground">User verification, teacher onboarding, and class capacity management.</p>
+        <p className="text-sm text-muted-foreground">User verification, facilitator onboarding, and class capacity management.</p>
       </div>
 
       {/* Metric cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Pending Verifications', value: verificationQueue.length, icon: Shield, color: 'text-accent' },
-          { label: 'Teachers Onboarding', value: teacherOnboarding.filter(t => t.stage !== 'Active').length, icon: Users, color: 'text-admin' },
-          { label: 'Active Teachers', value: teacherOnboarding.filter(t => t.stage === 'Active').length, icon: UserCheck, color: 'text-success' },
+          { label: 'Facilitators Onboarding', value: facilitatorOnboarding.filter(t => t.stage !== 'Active').length, icon: Users, color: 'text-admin' },
+          { label: 'Active Facilitators', value: facilitatorOnboarding.filter(t => t.stage === 'Active').length, icon: UserCheck, color: 'text-success' },
           { label: 'Groups at Capacity', value: classCapacity.filter(c => c.enrolled >= c.capacity).length, icon: AlertTriangle, color: 'text-destructive' },
         ].map((m) => (
           <Card key={m.label}>
@@ -97,14 +97,14 @@ export default function OpsDashboard() {
         </CardContent>
       </Card>
 
-      {/* Teacher Onboarding */}
+      {/* Facilitator Onboarding */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-admin" />Teacher Onboarding Pipeline</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-admin" />Facilitator Onboarding Pipeline</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {teacherOnboarding.map((t) => (
+            {facilitatorOnboarding.map((t) => (
               <div key={t.id} className="flex items-center gap-4 p-3 rounded-md border">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium">{t.name}</p>
@@ -134,7 +134,7 @@ export default function OpsDashboard() {
                 <TableHead>Language</TableHead>
                 <TableHead>Level</TableHead>
                 <TableHead>Schedule</TableHead>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Capacity</TableHead>
               </TableRow>
             </TableHeader>
@@ -144,7 +144,7 @@ export default function OpsDashboard() {
                   <TableCell className="font-medium">{c.language}</TableCell>
                   <TableCell>{c.level}</TableCell>
                   <TableCell className="text-xs text-muted-foreground">{c.day}</TableCell>
-                  <TableCell className="text-xs">{c.teacher}</TableCell>
+                  <TableCell className="text-xs">{c.facilitator}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${c.enrolled >= c.capacity ? 'text-destructive' : 'text-foreground'}`}>

@@ -26,8 +26,8 @@ export default function TeacherOnboardingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Teacher Onboarding</h1>
-        <p className="text-sm text-muted-foreground">Track teacher applications through the onboarding pipeline.</p>
+        <h1 className="text-2xl font-bold text-navy">Facilitator Onboarding</h1>
+        <p className="text-sm text-muted-foreground">Track facilitator applications through the onboarding pipeline.</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -40,7 +40,7 @@ export default function TeacherOnboardingPage() {
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
             <UserCheck className="h-8 w-8 text-success" />
-            <div><p className="text-2xl font-bold">{active.length}</p><p className="text-xs text-muted-foreground">Active Teachers</p></div>
+            <div><p className="text-2xl font-bold">{active.length}</p><p className="text-xs text-muted-foreground">Active Facilitators</p></div>
           </CardContent>
         </Card>
         <Card>
@@ -60,7 +60,7 @@ export default function TeacherOnboardingPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-admin" />Onboarding Pipeline</CardTitle>
-          <CardDescription className="text-xs">Full teacher application and onboarding tracking.</CardDescription>
+          <CardDescription className="text-xs">Full facilitator application and onboarding tracking.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {teacherOnboarding.map((t) => (

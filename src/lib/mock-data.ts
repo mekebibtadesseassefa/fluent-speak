@@ -12,24 +12,24 @@ export const ROLE_LABELS: Record<AdminRole, string> = {
 export const dashboardMetrics = {
   totalMRR: 'R$ 187.450',
   activeSubscriptions: 1_243,
-  activeTeachers: 47,
+  activeTeachers: 47, // DB column name stays, label changed in UI
   contentPublished: 312,
 };
 
 export const healthCards = [
   { label: 'Activation Rate', value: '78%', trend: '+3.2% vs last month', positive: true },
-  { label: 'Teacher Utilization', value: '14.2 hrs/wk', trend: '+1.1 hrs', positive: true },
+  { label: 'Facilitator Utilization', value: '14.2 hrs/wk', trend: '+1.1 hrs', positive: true },
   { label: 'Content Freshness', value: '92%', trend: 'On track', positive: true },
   { label: 'Cancellation Rate', value: '6.4%', trend: '-0.8%', positive: true },
 ];
 
 export const recentActivity = [
   { id: '1', time: '2 min ago', text: 'New company registered: TechBrasil Ltda', type: 'company' },
-  { id: '2', time: '15 min ago', text: 'Teacher onboarded: Amina K. (EN, FR)', type: 'teacher' },
+  { id: '2', time: '15 min ago', text: 'Facilitator onboarded: Amina K. (EN, FR)', type: 'teacher' },
   { id: '3', time: '1 hr ago', text: 'Subscription cancelled: João Silva (Individual Basic)', type: 'cancel' },
   { id: '4', time: '2 hrs ago', text: 'Content published: "The Power of Vulnerability" (TED)', type: 'content' },
   { id: '5', time: '3 hrs ago', text: 'Company plan upgraded: GlobalCorp → Plus', type: 'company' },
-  { id: '6', time: '4 hrs ago', text: 'New teacher application: Carlos M. (ES, PT)', type: 'teacher' },
+  { id: '6', time: '4 hrs ago', text: 'New facilitator application: Carlos M. (ES, PT)', type: 'teacher' },
   { id: '7', time: '5 hrs ago', text: 'Employee approved: Maria Santos @ InnovaTech', type: 'company' },
   { id: '8', time: '6 hrs ago', text: 'Group class auto-created: EN Intermediate (Tue 19:00)', type: 'class' },
 ];
@@ -185,7 +185,7 @@ export const auditEntries: AuditEntry[] = [
   { id: '3', timestamp: '2026-02-19 11:45:00', actor: 'Ops Admin', actorRole: 'sub_admin_ops', action: 'teacher.approved', resource: 'Amina K.', details: { after: { status: 'active', languages: ['EN', 'FR'] } } },
   { id: '4', timestamp: '2026-02-19 10:20:00', actor: 'Admin User', actorRole: 'super_admin', action: 'company.suspended', resource: 'EduStart ME', details: { before: { status: 'active' }, after: { status: 'suspended', reason: 'Payment overdue 45 days' } } },
   { id: '5', timestamp: '2026-02-18 16:00:00', actor: 'Content Admin', actorRole: 'sub_admin_content', action: 'content.published', resource: 'The Power of Vulnerability', details: { after: { framework: 'TED', language: 'EN', level: 'B1-C1' } } },
-  { id: '6', timestamp: '2026-02-18 14:30:00', actor: 'Finance Admin', actorRole: 'sub_admin_finance', action: 'payout.approved', resource: 'Teacher Batch Feb-1', details: { after: { teachers: 12, total: 'R$ 18.450' } } },
+  { id: '6', timestamp: '2026-02-18 14:30:00', actor: 'Finance Admin', actorRole: 'sub_admin_finance', action: 'payout.approved', resource: 'Facilitator Batch Feb-1', details: { after: { teachers: 12, total: 'R$ 18.450' } } },
   { id: '7', timestamp: '2026-02-18 11:00:00', actor: 'Admin User', actorRole: 'super_admin', action: 'methodology.published', resource: 'UIRF v2.1', details: { before: { version: '2.0', status: 'active' }, after: { version: '2.1', status: 'active' } } },
   { id: '8', timestamp: '2026-02-17 09:15:00', actor: 'Ops Admin', actorRole: 'sub_admin_ops', action: 'employee.verified', resource: 'Maria Santos @ InnovaTech', details: { after: { verified_year: 2026 } } },
 ];
