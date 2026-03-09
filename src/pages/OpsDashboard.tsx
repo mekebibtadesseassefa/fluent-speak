@@ -134,7 +134,7 @@ export default function OpsDashboard() {
                 <TableHead>Language</TableHead>
                 <TableHead>Level</TableHead>
                 <TableHead>Schedule</TableHead>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Capacity</TableHead>
               </TableRow>
             </TableHeader>
