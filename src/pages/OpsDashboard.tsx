@@ -20,10 +20,10 @@ const facilitatorOnboarding = [
 ];
 
 const classCapacity = [
-  { id: '1', language: 'EN', level: 'Intermediate', day: 'Tuesday 19:00', enrolled: 10, capacity: 12, teacher: 'Amina K.' },
-  { id: '2', language: 'EN', level: 'Advanced', day: 'Thursday 19:00', enrolled: 8, capacity: 12, teacher: 'David N.' },
-  { id: '3', language: 'ES', level: 'Beginner', day: 'Wednesday 18:00', enrolled: 12, capacity: 12, teacher: 'Carlos M.' },
-  { id: '4', language: 'FR', level: 'Intermediate', day: 'Monday 19:00', enrolled: 5, capacity: 12, teacher: 'Fatima R.' },
+  { id: '1', language: 'EN', level: 'Intermediate', day: 'Tuesday 19:00', enrolled: 10, capacity: 12, facilitator: 'Amina K.' },
+  { id: '2', language: 'EN', level: 'Advanced', day: 'Thursday 19:00', enrolled: 8, capacity: 12, facilitator: 'David N.' },
+  { id: '3', language: 'ES', level: 'Beginner', day: 'Wednesday 18:00', enrolled: 12, capacity: 12, facilitator: 'Carlos M.' },
+  { id: '4', language: 'FR', level: 'Intermediate', day: 'Monday 19:00', enrolled: 5, capacity: 12, facilitator: 'Fatima R.' },
 ];
 
 const STAGE_COLOR: Record<string, string> = {
