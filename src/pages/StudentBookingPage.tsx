@@ -43,13 +43,13 @@ export default function StudentBookingPage() {
     if (step === 3 && selectedFacilitator) loadSlots();
   }, [step, language, selectedFacilitator]);
 
-  const loadTeachers = async () => {
+  const loadFacilitators = async () => {
     const { data } = await supabase
       .from('teachers')
       .select('id, bio, languages_taught, profiles(full_name, avatar_url)')
       .eq('active', true)
       .contains('languages_taught', [language]);
-    if (data) setTeachers(data as TeacherOption[]);
+    if (data) setFacilitators(data as FacilitatorOption[]);
   };
 
   const loadSlots = async () => {
