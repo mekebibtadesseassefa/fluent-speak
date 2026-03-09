@@ -24,8 +24,8 @@ export default function PayoutsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Teacher Payouts</h1>
-        <p className="text-sm text-muted-foreground">Manage teacher payout batches and processing.</p>
+        <h1 className="text-2xl font-bold text-navy">Facilitator Payouts</h1>
+        <p className="text-sm text-muted-foreground">Manage facilitator payout batches and processing.</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
