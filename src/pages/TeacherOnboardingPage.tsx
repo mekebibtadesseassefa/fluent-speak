@@ -40,7 +40,7 @@ export default function TeacherOnboardingPage() {
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
             <UserCheck className="h-8 w-8 text-success" />
-            <div><p className="text-2xl font-bold">{active.length}</p><p className="text-xs text-muted-foreground">Active Teachers</p></div>
+            <div><p className="text-2xl font-bold">{active.length}</p><p className="text-xs text-muted-foreground">Active Facilitators</p></div>
           </CardContent>
         </Card>
         <Card>
