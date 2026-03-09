@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import DemoLoginButtons from '@/components/DemoLoginButtons';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -217,6 +218,9 @@ export default function AuthPage() {
               </form>
             </TabsContent>
           </Tabs>
+          <div className="mt-6">
+            <DemoLoginButtons />
+          </div>
         </CardContent>
       </Card>
     </div>
