@@ -107,7 +107,7 @@ export default function StudentBookingPage() {
     setBooking(false);
     setStep(1);
     setLanguage('');
-    setSelectedTeacher(null);
+    setSelectedFacilitator(null);
     setSelectedSlot(null);
     setAgenda('');
   };
