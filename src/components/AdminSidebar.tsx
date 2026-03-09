@@ -19,7 +19,7 @@ const ROLE_LABELS: Record<AppRole, string> = {
   sub_admin_content: 'Sub-Admin Content',
   pedagogical_lead: 'Pedagogical Lead',
   content_curator: 'Content Curator',
-  teacher: 'Teacher',
+  teacher: 'Facilitator',
   student: 'Student',
   company_hr: 'Company HR',
   company_finance: 'Company Finance',
