@@ -218,6 +218,9 @@ export default function AuthPage() {
               </form>
             </TabsContent>
           </Tabs>
+          <div className="mt-6">
+            <DemoLoginButtons />
+          </div>
         </CardContent>
       </Card>
     </div>
