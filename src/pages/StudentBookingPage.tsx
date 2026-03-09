@@ -142,21 +142,21 @@ export default function StudentBookingPage() {
       {step === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> Choose a Teacher</CardTitle>
+            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> Choose a Facilitator</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {teachers.length === 0 ? (
-              <p className="text-muted-foreground">No teachers available for this language yet.</p>
+            {facilitators.length === 0 ? (
+              <p className="text-muted-foreground">No facilitators available for this language yet.</p>
             ) : (
-              teachers.map(t => (
+              facilitators.map(t => (
                 <div
                   key={t.id}
-                  onClick={() => { setSelectedTeacher(t.id); setStep(3); }}
+                  onClick={() => { setSelectedFacilitator(t.id); setStep(3); }}
                   className={`p-4 rounded-lg border cursor-pointer transition-colors hover:border-primary/50 ${
-                    selectedTeacher === t.id ? 'border-primary bg-primary/5' : ''
+                    selectedFacilitator === t.id ? 'border-primary bg-primary/5' : ''
                   }`}
                 >
-                  <p className="font-medium">{t.profiles?.full_name || 'Teacher'}</p>
+                  <p className="font-medium">{t.profiles?.full_name || 'Facilitator'}</p>
                   <p className="text-sm text-muted-foreground">{t.bio || 'No bio available'}</p>
                   <div className="flex gap-1 mt-2">
                     {t.languages_taught.map(l => (
