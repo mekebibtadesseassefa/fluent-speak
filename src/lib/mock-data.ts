@@ -12,7 +12,7 @@ export const ROLE_LABELS: Record<AdminRole, string> = {
 export const dashboardMetrics = {
   totalMRR: 'R$ 187.450',
   activeSubscriptions: 1_243,
-  activeTeachers: 47,
+  activeTeachers: 47, // DB column name stays, label changed in UI
   contentPublished: 312,
 };
 
