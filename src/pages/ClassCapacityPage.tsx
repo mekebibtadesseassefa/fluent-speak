@@ -62,7 +62,7 @@ export default function ClassCapacityPage() {
                 <TableHead>Language</TableHead>
                 <TableHead>Level</TableHead>
                 <TableHead>Schedule</TableHead>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Capacity</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
