@@ -18,7 +18,7 @@ export const dashboardMetrics = {
 
 export const healthCards = [
   { label: 'Activation Rate', value: '78%', trend: '+3.2% vs last month', positive: true },
-  { label: 'Teacher Utilization', value: '14.2 hrs/wk', trend: '+1.1 hrs', positive: true },
+  { label: 'Facilitator Utilization', value: '14.2 hrs/wk', trend: '+1.1 hrs', positive: true },
   { label: 'Content Freshness', value: '92%', trend: 'On track', positive: true },
   { label: 'Cancellation Rate', value: '6.4%', trend: '-0.8%', positive: true },
 ];
