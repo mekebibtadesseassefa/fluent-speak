@@ -39,9 +39,9 @@ export default function StudentBookingPage() {
   const [booking, setBooking] = useState(false);
 
   useEffect(() => {
-    if (step === 2 && language) loadTeachers();
-    if (step === 3 && selectedTeacher) loadSlots();
-  }, [step, language, selectedTeacher]);
+    if (step === 2 && language) loadFacilitators();
+    if (step === 3 && selectedFacilitator) loadSlots();
+  }, [step, language, selectedFacilitator]);
 
   const loadTeachers = async () => {
     const { data } = await supabase
