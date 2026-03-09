@@ -31,8 +31,8 @@ export default function StudentBookingPage() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [language, setLanguage] = useState('');
-  const [teachers, setTeachers] = useState<TeacherOption[]>([]);
-  const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
+  const [facilitators, setFacilitators] = useState<FacilitatorOption[]>([]);
+  const [selectedFacilitator, setSelectedFacilitator] = useState<string | null>(null);
   const [slots, setSlots] = useState<SlotOption[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [agenda, setAgenda] = useState('');
