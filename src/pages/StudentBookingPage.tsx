@@ -57,7 +57,7 @@ export default function StudentBookingPage() {
     const { data } = await supabase
       .from('teacher_availability')
       .select('id, slot_date, start_time, end_time, max_students, current_bookings')
-      .eq('teacher_id', selectedTeacher!)
+      .eq('teacher_id', selectedFacilitator!)
       .eq('available', true)
       .gte('slot_date', minDate)
       .order('slot_date')
