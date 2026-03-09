@@ -97,14 +97,14 @@ export default function OpsDashboard() {
         </CardContent>
       </Card>
 
-      {/* Teacher Onboarding */}
+      {/* Facilitator Onboarding */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-admin" />Teacher Onboarding Pipeline</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-admin" />Facilitator Onboarding Pipeline</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {teacherOnboarding.map((t) => (
+            {facilitatorOnboarding.map((t) => (
               <div key={t.id} className="flex items-center gap-4 p-3 rounded-md border">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium">{t.name}</p>
