@@ -38,7 +38,7 @@ export default function PayoutsPage() {
         <CardHeader className="pb-3 flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-base flex items-center gap-2"><DollarSign className="h-4 w-4 text-accent" />Payout Queue</CardTitle>
-            <CardDescription className="text-xs mt-1">Review and approve teacher payment batches.</CardDescription>
+            <CardDescription className="text-xs mt-1">Review and approve facilitator payment batches.</CardDescription>
           </div>
           <Button size="sm" className="h-7 text-xs">Approve All Pending</Button>
         </CardHeader>
