@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { format, addHours } from 'date-fns';
 import { Calendar, User, Clock, FileText } from 'lucide-react';
 
-interface TeacherOption {
+interface FacilitatorOption {
   id: string;
   bio: string | null;
   languages_taught: string[];
