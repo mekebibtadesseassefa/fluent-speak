@@ -39,7 +39,7 @@ const superAdminNav = [
 const opsNav = [
   { title: 'Overview', url: '/admin', icon: LayoutDashboard },
   { title: 'User Verification', url: '/admin/verification', icon: CheckSquare },
-  { title: 'Teacher Onboarding', url: '/admin/teacher-onboarding', icon: Users },
+  { title: 'Facilitator Onboarding', url: '/admin/teacher-onboarding', icon: Users },
   { title: 'Class Capacity', url: '/admin/class-capacity', icon: Calendar },
 ];
 
