@@ -46,7 +46,7 @@ export default function PayoutsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Period</TableHead>
                 <TableHead className="text-right">Classes</TableHead>
                 <TableHead className="text-right">Gross</TableHead>
