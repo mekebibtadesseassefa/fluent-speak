@@ -78,7 +78,7 @@ export default function StudentBookingPage() {
     const { data: cls, error: classError } = await supabase.from('classes').insert({
       type: 'private',
       language,
-      teacher_id: selectedTeacher!,
+      teacher_id: selectedFacilitator!,
       availability_slot_id: selectedSlot,
       scheduled_at: `${slot.slot_date}T${slot.start_time}`,
       capacity: 1,
