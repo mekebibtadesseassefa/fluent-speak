@@ -83,7 +83,7 @@ function getNavForRole(role: AppRole | null) {
     case 'sub_admin_content': return contentNav;
     case 'content_curator': return contentNav;
     case 'pedagogical_lead': return superAdminNav;
-    case 'teacher': return teacherNav;
+    case 'teacher': return facilitatorNav;
     case 'student': return studentNav;
     case 'company_hr': return hrNav;
     case 'company_finance': return hrNav;

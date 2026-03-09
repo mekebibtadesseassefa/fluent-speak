@@ -185,7 +185,7 @@ export const auditEntries: AuditEntry[] = [
   { id: '3', timestamp: '2026-02-19 11:45:00', actor: 'Ops Admin', actorRole: 'sub_admin_ops', action: 'teacher.approved', resource: 'Amina K.', details: { after: { status: 'active', languages: ['EN', 'FR'] } } },
   { id: '4', timestamp: '2026-02-19 10:20:00', actor: 'Admin User', actorRole: 'super_admin', action: 'company.suspended', resource: 'EduStart ME', details: { before: { status: 'active' }, after: { status: 'suspended', reason: 'Payment overdue 45 days' } } },
   { id: '5', timestamp: '2026-02-18 16:00:00', actor: 'Content Admin', actorRole: 'sub_admin_content', action: 'content.published', resource: 'The Power of Vulnerability', details: { after: { framework: 'TED', language: 'EN', level: 'B1-C1' } } },
-  { id: '6', timestamp: '2026-02-18 14:30:00', actor: 'Finance Admin', actorRole: 'sub_admin_finance', action: 'payout.approved', resource: 'Teacher Batch Feb-1', details: { after: { teachers: 12, total: 'R$ 18.450' } } },
+  { id: '6', timestamp: '2026-02-18 14:30:00', actor: 'Finance Admin', actorRole: 'sub_admin_finance', action: 'payout.approved', resource: 'Facilitator Batch Feb-1', details: { after: { teachers: 12, total: 'R$ 18.450' } } },
   { id: '7', timestamp: '2026-02-18 11:00:00', actor: 'Admin User', actorRole: 'super_admin', action: 'methodology.published', resource: 'UIRF v2.1', details: { before: { version: '2.0', status: 'active' }, after: { version: '2.1', status: 'active' } } },
   { id: '8', timestamp: '2026-02-17 09:15:00', actor: 'Ops Admin', actorRole: 'sub_admin_ops', action: 'employee.verified', resource: 'Maria Santos @ InnovaTech', details: { after: { verified_year: 2026 } } },
 ];

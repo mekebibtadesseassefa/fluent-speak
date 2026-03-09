@@ -75,7 +75,7 @@ export default function ClassCapacityPage() {
                     <TableCell className="font-medium">{c.language}</TableCell>
                     <TableCell>{c.level}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{c.day}</TableCell>
-                    <TableCell className="text-xs">{c.teacher}</TableCell>
+                    <TableCell className="text-xs">{c.facilitator}</TableCell>
                     <TableCell>
                       <span className={`text-sm font-medium ${pct >= 1 ? 'text-destructive' : pct >= 0.8 ? 'text-accent' : 'text-foreground'}`}>
                         {c.enrolled}/{c.capacity}

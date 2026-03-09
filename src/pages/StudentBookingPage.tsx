@@ -180,7 +180,7 @@ export default function StudentBookingPage() {
           <CardContent className="space-y-3">
             <p className="text-xs text-muted-foreground">Only slots ≥72 hours from now are shown (agenda submission requirement).</p>
             {slots.length === 0 ? (
-              <p className="text-muted-foreground">No available slots. Please check back later or choose another teacher.</p>
+              <p className="text-muted-foreground">No available slots. Please check back later or choose another facilitator.</p>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {slots.map(s => (

@@ -60,7 +60,7 @@ export default function TeacherOnboardingPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-admin" />Onboarding Pipeline</CardTitle>
-          <CardDescription className="text-xs">Full teacher application and onboarding tracking.</CardDescription>
+          <CardDescription className="text-xs">Full facilitator application and onboarding tracking.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {teacherOnboarding.map((t) => (

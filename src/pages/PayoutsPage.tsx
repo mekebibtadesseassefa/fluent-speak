@@ -58,7 +58,7 @@ export default function PayoutsPage() {
                 const badge = STATUS[p.status];
                 return (
                   <TableRow key={p.id}>
-                    <TableCell className="font-medium">{p.teacher}</TableCell>
+                    <TableCell className="font-medium">{p.facilitator}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{p.period}</TableCell>
                     <TableCell className="text-right">{p.classes}</TableCell>
                     <TableCell className="text-right font-mono text-sm">{p.gross}</TableCell>

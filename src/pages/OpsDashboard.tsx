@@ -144,7 +144,7 @@ export default function OpsDashboard() {
                   <TableCell className="font-medium">{c.language}</TableCell>
                   <TableCell>{c.level}</TableCell>
                   <TableCell className="text-xs text-muted-foreground">{c.day}</TableCell>
-                  <TableCell className="text-xs">{c.teacher}</TableCell>
+                  <TableCell className="text-xs">{c.facilitator}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${c.enrolled >= c.capacity ? 'text-destructive' : 'text-foreground'}`}>

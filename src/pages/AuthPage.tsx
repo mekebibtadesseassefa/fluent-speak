@@ -14,7 +14,7 @@ type SignupRole = 'student' | 'teacher' | 'company_hr';
 
 const ROLE_OPTIONS: { value: SignupRole; label: string; desc: string }[] = [
   { value: 'student', label: 'Student', desc: 'Learn languages with real content' },
-  { value: 'teacher', label: 'Teacher', desc: 'Facilitate classes as an educator' },
+  { value: 'teacher', label: 'Facilitator', desc: 'Facilitate classes as an educator' },
   { value: 'company_hr', label: 'Company (HR)', desc: 'Manage employee language benefits' },
 ];
 
