@@ -55,7 +55,7 @@ export default function DemoLoginButtons() {
       await supabase.from('profiles').update({ full_name: account.name }).eq('id', signUpData.user.id);
 
       // Assign role
-      await supabase.from('user_roles').insert({ user_id: signUpData.user.id, role: account.role, is_active: true });
+      await supabase.from('user_roles').insert({ user_id: signUpData.user.id, role: account.role as any, is_active: true });
 
       // Role-specific setup
       if (account.role === 'teacher') {
