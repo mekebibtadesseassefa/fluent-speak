@@ -64,7 +64,7 @@ const studentNav = [
   { title: 'My Classes', url: '/student/classes', icon: Mic },
 ];
 
-const teacherNav = [
+const facilitatorNav = [
   { title: 'Dashboard', url: '/teacher', icon: LayoutDashboard },
   { title: 'Schedule', url: '/teacher/schedule', icon: Calendar },
   { title: 'Student Agendas', url: '/teacher/agendas', icon: FileText },
