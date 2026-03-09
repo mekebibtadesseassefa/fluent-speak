@@ -12,7 +12,7 @@ const verificationQueue = [
   { id: '4', name: 'Sofia Ribeiro', cpf: '***.789.012-**', type: 'CPF', submitted: '1 day ago', status: 'pending' },
 ];
 
-const teacherOnboarding = [
+const facilitatorOnboarding = [
   { id: '1', name: 'Amina K.', languages: ['EN', 'FR'], stage: 'Training', progress: 75 },
   { id: '2', name: 'Carlos M.', languages: ['ES', 'PT'], stage: 'Application Review', progress: 25 },
   { id: '3', name: 'Fatima R.', languages: ['EN', 'AR'], stage: 'Profile Complete', progress: 50 },
