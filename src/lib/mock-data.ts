@@ -25,7 +25,7 @@ export const healthCards = [
 
 export const recentActivity = [
   { id: '1', time: '2 min ago', text: 'New company registered: TechBrasil Ltda', type: 'company' },
-  { id: '2', time: '15 min ago', text: 'Teacher onboarded: Amina K. (EN, FR)', type: 'teacher' },
+  { id: '2', time: '15 min ago', text: 'Facilitator onboarded: Amina K. (EN, FR)', type: 'teacher' },
   { id: '3', time: '1 hr ago', text: 'Subscription cancelled: João Silva (Individual Basic)', type: 'cancel' },
   { id: '4', time: '2 hrs ago', text: 'Content published: "The Power of Vulnerability" (TED)', type: 'content' },
   { id: '5', time: '3 hrs ago', text: 'Company plan upgraded: GlobalCorp → Plus', type: 'company' },
