@@ -24,7 +24,12 @@ Deno.serve(async (req) => {
     const existing = existingUsers?.users?.find(u => u.email === email);
 
     if (existing) {
-      // User exists, just return success — client will sign in normally
+      // Ensure email is confirmed for demo users
+      if (!existing.email_confirmed_at) {
+        await supabaseAdmin.auth.admin.updateUserById(existing.id, {
+          email_confirm: true,
+        });
+      }
       return new Response(JSON.stringify({ exists: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
