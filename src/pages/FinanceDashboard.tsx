@@ -111,7 +111,7 @@ export default function FinanceDashboard() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Period</TableHead>
                 <TableHead className="text-right">Classes</TableHead>
                 <TableHead className="text-right">Gross</TableHead>
