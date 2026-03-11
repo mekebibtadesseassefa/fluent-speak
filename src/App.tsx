@@ -36,7 +36,7 @@ import StudentSelfStudy from "@/pages/StudentSelfStudy";
 import StudentBookingPage from "@/pages/StudentBookingPage";
 import StudentClassHistory from "@/pages/StudentClassHistory";
 
-// Teacher pages
+// Facilitator pages
 import TeacherDashboardPage from "@/pages/TeacherDashboardPage";
 import TeacherSchedulePage from "@/pages/TeacherSchedulePage";
 import TeacherIncomePage from "@/pages/TeacherIncomePage";
