@@ -138,7 +138,7 @@ export default function StudentBookingPage() {
         </Card>
       )}
 
-      {/* Step 2: Teacher */}
+      {/* Step 2: Facilitator */}
       {step === 2 && (
         <Card>
           <CardHeader>

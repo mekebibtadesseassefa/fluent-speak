@@ -101,7 +101,7 @@ const App = () => (
             <Route path="/student/book" element={<ProtectedRoute><AdminLayout><StudentBookingPage /></AdminLayout></ProtectedRoute>} />
             <Route path="/student/classes" element={<ProtectedRoute><AdminLayout><StudentClassHistory /></AdminLayout></ProtectedRoute>} />
 
-            {/* Teacher routes */}
+            {/* Facilitator routes */}
             <Route path="/teacher" element={<ProtectedRoute><AdminLayout><TeacherDashboardPage /></AdminLayout></ProtectedRoute>} />
             <Route path="/teacher/schedule" element={<ProtectedRoute><AdminLayout><TeacherSchedulePage /></AdminLayout></ProtectedRoute>} />
             <Route path="/teacher/agendas" element={<ProtectedRoute><AdminLayout><PlaceholderPage title="Student Agendas" description="Review submitted agendas for upcoming classes." /></AdminLayout></ProtectedRoute>} />

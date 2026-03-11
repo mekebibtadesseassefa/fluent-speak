@@ -59,7 +59,7 @@ function SortablePhaseCard({ phase }: { phase: MethodologyPhase }) {
                   <p className="text-sm text-foreground">{phase.studentInstruction}</p>
                 </div>
                 <div className="bg-muted rounded-md p-3">
-                  <p className="text-[11px] uppercase text-muted-foreground font-medium mb-1">Teacher Prompt</p>
+                  <p className="text-[11px] uppercase text-muted-foreground font-medium mb-1">Facilitator Prompt</p>
                   <p className="text-sm text-foreground">{phase.teacherPrompt}</p>
                 </div>
               </div>
