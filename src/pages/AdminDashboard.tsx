@@ -7,7 +7,7 @@ const metricIcons = [DollarSign, Users, GraduationCap, FileText];
 const metricEntries = [
   { label: 'Total MRR', value: dashboardMetrics.totalMRR },
   { label: 'Active Subscriptions', value: dashboardMetrics.activeSubscriptions.toLocaleString() },
-  { label: 'Active Teachers', value: dashboardMetrics.activeTeachers },
+  { label: 'Active Facilitators', value: dashboardMetrics.activeTeachers },
   { label: 'Content Published', value: dashboardMetrics.contentPublished },
 ];
 
