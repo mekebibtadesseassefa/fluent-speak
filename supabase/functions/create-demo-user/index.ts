@@ -24,7 +24,57 @@ Deno.serve(async (req) => {
     const existing = existingUsers?.users?.find(u => u.email === email);
 
     if (existing) {
-      // User exists, just return success — client will sign in normally
+      const userId = existing.id;
+
+      // Ensure email is confirmed for demo users
+      if (!existing.email_confirmed_at) {
+        await supabaseAdmin.auth.admin.updateUserById(userId, {
+          email_confirm: true,
+        });
+      }
+
+      // Ensure role exists
+      const { data: existingRoles } = await supabaseAdmin
+        .from("user_roles")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("role", role);
+
+      if (!existingRoles || existingRoles.length === 0) {
+        await supabaseAdmin.from("user_roles").insert({ user_id: userId, role, is_active: true });
+      }
+
+      // Ensure role-specific setup
+      if (role === "teacher" || role_setup === "teacher") {
+        const { data: t } = await supabaseAdmin.from("teachers").select("id").eq("id", userId).single();
+        if (!t) await supabaseAdmin.from("teachers").insert({ id: userId, active: true, languages_taught: ["en", "pt"] });
+      }
+      if (role === "student" || role_setup === "student") {
+        const { data: s } = await supabaseAdmin.from("student_preferences").select("user_id").eq("user_id", userId).single();
+        if (!s) await supabaseAdmin.from("student_preferences").insert({ user_id: userId });
+      }
+      if (role === "company_hr" || role_setup === "company_hr") {
+        const { data: ce } = await supabaseAdmin.from("company_employees").select("id").eq("user_id", userId).single();
+        if (!ce) {
+          const { data: company } = await supabaseAdmin
+            .from("companies")
+            .insert({ name: "Demo Corp", cnpj: "00000000000100" })
+            .select()
+            .single();
+          if (company) {
+            await supabaseAdmin.from("company_employees").insert({
+              company_id: company.id,
+              user_id: userId,
+              active: true,
+              approved_at: new Date().toISOString(),
+            });
+          }
+        }
+      }
+
+      // Update profile name
+      await supabaseAdmin.from("profiles").update({ full_name }).eq("id", userId);
+
       return new Response(JSON.stringify({ exists: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
