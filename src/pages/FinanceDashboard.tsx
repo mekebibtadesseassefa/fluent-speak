@@ -104,7 +104,7 @@ export default function FinanceDashboard() {
       {/* Payout Queue */}
       <Card>
         <CardHeader className="pb-3 flex flex-row items-center justify-between">
-          <CardTitle className="text-base flex items-center gap-2"><DollarSign className="h-4 w-4 text-accent" />Teacher Payout Queue</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><DollarSign className="h-4 w-4 text-accent" />Facilitator Payout Queue</CardTitle>
           <Button size="sm" className="h-7 text-xs">Approve Batch</Button>
         </CardHeader>
         <CardContent className="p-0">
