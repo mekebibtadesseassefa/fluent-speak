@@ -14,11 +14,11 @@ const subscriptionOverview = [
 ];
 
 const payoutQueue = [
-  { id: '1', teacher: 'Amina K.', period: 'Feb 1–15', classes: 18, gross: 'R$ 2.340', status: 'pending' },
-  { id: '2', teacher: 'David N.', period: 'Feb 1–15', classes: 22, gross: 'R$ 2.860', status: 'pending' },
-  { id: '3', teacher: 'Carlos M.', period: 'Feb 1–15', classes: 14, gross: 'R$ 1.820', status: 'pending' },
-  { id: '4', teacher: 'Fatima R.', period: 'Jan 16–31', classes: 16, gross: 'R$ 2.080', status: 'paid' },
-  { id: '5', teacher: 'Amina K.', period: 'Jan 16–31', classes: 20, gross: 'R$ 2.600', status: 'paid' },
+  { id: '1', facilitator: 'Amina K.', period: 'Feb 1–15', classes: 18, gross: 'R$ 2.340', status: 'pending' },
+  { id: '2', facilitator: 'David N.', period: 'Feb 1–15', classes: 22, gross: 'R$ 2.860', status: 'pending' },
+  { id: '3', facilitator: 'Carlos M.', period: 'Feb 1–15', classes: 14, gross: 'R$ 1.820', status: 'pending' },
+  { id: '4', facilitator: 'Fatima R.', period: 'Jan 16–31', classes: 16, gross: 'R$ 2.080', status: 'paid' },
+  { id: '5', facilitator: 'Amina K.', period: 'Jan 16–31', classes: 20, gross: 'R$ 2.600', status: 'paid' },
 ];
 
 const refundLog = [
