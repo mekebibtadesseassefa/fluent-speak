@@ -14,11 +14,11 @@ const subscriptionOverview = [
 ];
 
 const payoutQueue = [
-  { id: '1', teacher: 'Amina K.', period: 'Feb 1–15', classes: 18, gross: 'R$ 2.340', status: 'pending' },
-  { id: '2', teacher: 'David N.', period: 'Feb 1–15', classes: 22, gross: 'R$ 2.860', status: 'pending' },
-  { id: '3', teacher: 'Carlos M.', period: 'Feb 1–15', classes: 14, gross: 'R$ 1.820', status: 'pending' },
-  { id: '4', teacher: 'Fatima R.', period: 'Jan 16–31', classes: 16, gross: 'R$ 2.080', status: 'paid' },
-  { id: '5', teacher: 'Amina K.', period: 'Jan 16–31', classes: 20, gross: 'R$ 2.600', status: 'paid' },
+  { id: '1', facilitator: 'Amina K.', period: 'Feb 1–15', classes: 18, gross: 'R$ 2.340', status: 'pending' },
+  { id: '2', facilitator: 'David N.', period: 'Feb 1–15', classes: 22, gross: 'R$ 2.860', status: 'pending' },
+  { id: '3', facilitator: 'Carlos M.', period: 'Feb 1–15', classes: 14, gross: 'R$ 1.820', status: 'pending' },
+  { id: '4', facilitator: 'Fatima R.', period: 'Jan 16–31', classes: 16, gross: 'R$ 2.080', status: 'paid' },
+  { id: '5', facilitator: 'Amina K.', period: 'Jan 16–31', classes: 20, gross: 'R$ 2.600', status: 'paid' },
 ];
 
 const refundLog = [
@@ -47,7 +47,7 @@ export default function FinanceDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-navy">Finance Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Subscriptions, teacher payouts, and refund management.</p>
+        <p className="text-sm text-muted-foreground">Subscriptions, facilitator payouts, and refund management.</p>
       </div>
 
       {/* Metric cards */}
@@ -104,14 +104,14 @@ export default function FinanceDashboard() {
       {/* Payout Queue */}
       <Card>
         <CardHeader className="pb-3 flex flex-row items-center justify-between">
-          <CardTitle className="text-base flex items-center gap-2"><DollarSign className="h-4 w-4 text-accent" />Teacher Payout Queue</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><DollarSign className="h-4 w-4 text-accent" />Facilitator Payout Queue</CardTitle>
           <Button size="sm" className="h-7 text-xs">Approve Batch</Button>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Teacher</TableHead>
+                <TableHead>Facilitator</TableHead>
                 <TableHead>Period</TableHead>
                 <TableHead className="text-right">Classes</TableHead>
                 <TableHead className="text-right">Gross</TableHead>
@@ -123,7 +123,7 @@ export default function FinanceDashboard() {
                 const badge = PAYOUT_STATUS[p.status];
                 return (
                   <TableRow key={p.id}>
-                    <TableCell className="font-medium">{p.teacher}</TableCell>
+                    <TableCell className="font-medium">{p.facilitator}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{p.period}</TableCell>
                     <TableCell className="text-right">{p.classes}</TableCell>
                     <TableCell className="text-right font-mono text-sm">{p.gross}</TableCell>
