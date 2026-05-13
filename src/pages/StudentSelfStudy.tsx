@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,7 @@ interface Phase {
 }
 
 export default function StudentSelfStudy() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -86,7 +88,7 @@ export default function StudentSelfStudy() {
       word: vocabWord.trim(),
       context_sentence: vocabContext.trim() || null,
     });
-    toast({ title: 'Saved!', description: `"${vocabWord}" added to your vocabulary.` });
+    toast({ title: t('selfStudy.saved'), description: t('selfStudy.savedDesc', { word: vocabWord }) });
     setVocabWord('');
     setVocabContext('');
   };
@@ -100,7 +102,7 @@ export default function StudentSelfStudy() {
   };
 
   if (!content) {
-    return <div className="p-6 text-muted-foreground">Loading content...</div>;
+    return <div className="p-6 text-muted-foreground">{t('selfStudy.loading')}</div>;
   }
 
   const embedUrl = getYouTubeEmbedUrl(content.embed_url || content.source_url);
@@ -112,12 +114,11 @@ export default function StudentSelfStudy() {
         <div className="flex gap-2 mt-2">
           <Badge variant="secondary">{content.level_min}–{content.level_max}</Badge>
           {content.content_frameworks && <Badge variant="outline">{content.content_frameworks.name}</Badge>}
-          {content.duration_seconds && <Badge variant="outline">{Math.round(content.duration_seconds / 60)} min</Badge>}
+          {content.duration_seconds && <Badge variant="outline">{Math.round(content.duration_seconds / 60)} {t('common.minutes')}</Badge>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Video / Source */}
         <div className="lg:col-span-2 space-y-4">
           {embedUrl ? (
             <div className="aspect-video rounded-lg overflow-hidden bg-muted">
@@ -127,18 +128,17 @@ export default function StudentSelfStudy() {
             <Card>
               <CardContent className="p-6 text-center">
                 <a href={content.source_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                  <ExternalLink className="h-4 w-4" /> Open Source Content
+                  <ExternalLink className="h-4 w-4" /> {t('selfStudy.openSource')}
                 </a>
               </CardContent>
             </Card>
           ) : (
-            <Card><CardContent className="p-6 text-center text-muted-foreground">No media available</CardContent></Card>
+            <Card><CardContent className="p-6 text-center text-muted-foreground">{t('selfStudy.noMedia')}</CardContent></Card>
           )}
 
-          {/* Transcript */}
           {content.transcript_text && (
             <Card>
-              <CardHeader><CardTitle className="text-base">Transcript</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">{t('selfStudy.transcript')}</CardTitle></CardHeader>
               <CardContent>
                 <div className="max-h-64 overflow-y-auto text-sm text-muted-foreground whitespace-pre-wrap">
                   {content.transcript_text}
@@ -147,14 +147,13 @@ export default function StudentSelfStudy() {
             </Card>
           )}
 
-          {/* Key Ideas */}
           <Card>
-            <CardHeader><CardTitle className="text-base">Key Ideas</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">{t('selfStudy.keyIdeas')}</CardTitle></CardHeader>
             <CardContent className="space-y-2">
               {keyIdeas.map((idea, i) => (
                 <Input
                   key={i}
-                  placeholder={`Key idea ${i + 1}...`}
+                  placeholder={t('selfStudy.keyIdeaPlaceholder', { n: i + 1 })}
                   value={idea}
                   onChange={e => {
                     const next = [...keyIdeas];
@@ -167,13 +166,11 @@ export default function StudentSelfStudy() {
           </Card>
         </div>
 
-        {/* Right Panel: UIRF + Vocabulary */}
         <div className="space-y-4">
-          {/* UIRF Methodology Guide */}
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-primary" /> UIRF Study Guide
+                <BookOpen className="h-4 w-4 text-primary" /> {t('selfStudy.uirfGuide')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -195,16 +192,15 @@ export default function StudentSelfStudy() {
             </CardContent>
           </Card>
 
-          {/* Vocabulary Save */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Save Vocabulary</CardTitle>
+              <CardTitle className="text-base">{t('selfStudy.saveVocabulary')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Input placeholder="Word or expression" value={vocabWord} onChange={e => setVocabWord(e.target.value)} />
-              <Textarea placeholder="Context sentence (optional)" value={vocabContext} onChange={e => setVocabContext(e.target.value)} rows={2} />
+              <Input placeholder={t('selfStudy.wordPlaceholder')} value={vocabWord} onChange={e => setVocabWord(e.target.value)} />
+              <Textarea placeholder={t('selfStudy.contextPlaceholder')} value={vocabContext} onChange={e => setVocabContext(e.target.value)} rows={2} />
               <Button onClick={saveVocab} size="sm" className="w-full gap-1" disabled={!vocabWord.trim()}>
-                <Save className="h-3.5 w-3.5" /> Save
+                <Save className="h-3.5 w-3.5" /> {t('common.save')}
               </Button>
             </CardContent>
           </Card>

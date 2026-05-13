@@ -1,8 +1,9 @@
 import {
-  LayoutDashboard, Building2, BookOpen, FileText, Flag, ClipboardList, BarChart3, Settings, Users, DollarSign, Calendar, CheckSquare, LogOut, Mic, Flame, GraduationCap,
+  LayoutDashboard, Building2, BookOpen, FileText, Flag, ClipboardList, BarChart3, Settings, Users, DollarSign, Calendar, CheckSquare, LogOut, Mic,
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth, type AppRole } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -12,70 +13,59 @@ import {
   SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator,
 } from '@/components/ui/sidebar';
 
-const ROLE_LABELS: Record<AppRole, string> = {
-  super_admin: 'Super Admin',
-  sub_admin_ops: 'Sub-Admin Ops',
-  sub_admin_finance: 'Sub-Admin Finance',
-  sub_admin_content: 'Sub-Admin Content',
-  pedagogical_lead: 'Pedagogical Lead',
-  content_curator: 'Content Curator',
-  teacher: 'Facilitator',
-  student: 'Student',
-  company_hr: 'Company HR',
-  company_finance: 'Company Finance',
-};
+type NavItem = { titleKey: string; url: string; icon: any };
 
-const superAdminNav = [
-  { title: 'Overview', url: '/admin', icon: LayoutDashboard },
-  { title: 'Methodology', url: '/admin/methodology', icon: BookOpen },
-  { title: 'Companies', url: '/admin/companies', icon: Building2 },
-  { title: 'Content', url: '/admin/content', icon: FileText },
-  { title: 'Feature Flags', url: '/admin/feature-flags', icon: Flag },
-  { title: 'Audit Log', url: '/admin/audit-log', icon: ClipboardList },
-  { title: 'Analytics', url: '/admin/analytics', icon: BarChart3 },
-  { title: 'Settings', url: '/admin/settings', icon: Settings },
+const superAdminNav: NavItem[] = [
+  { titleKey: 'nav.overview', url: '/admin', icon: LayoutDashboard },
+  { titleKey: 'nav.methodology', url: '/admin/methodology', icon: BookOpen },
+  { titleKey: 'nav.companies', url: '/admin/companies', icon: Building2 },
+  { titleKey: 'nav.content', url: '/admin/content', icon: FileText },
+  { titleKey: 'nav.featureFlags', url: '/admin/feature-flags', icon: Flag },
+  { titleKey: 'nav.auditLog', url: '/admin/audit-log', icon: ClipboardList },
+  { titleKey: 'nav.analytics', url: '/admin/analytics', icon: BarChart3 },
+  { titleKey: 'nav.settings', url: '/admin/settings', icon: Settings },
 ];
 
-const opsNav = [
-  { title: 'Overview', url: '/admin', icon: LayoutDashboard },
-  { title: 'User Verification', url: '/admin/verification', icon: CheckSquare },
-  { title: 'Facilitator Onboarding', url: '/admin/teacher-onboarding', icon: Users },
-  { title: 'Class Capacity', url: '/admin/class-capacity', icon: Calendar },
+const opsNav: NavItem[] = [
+  { titleKey: 'nav.overview', url: '/admin', icon: LayoutDashboard },
+  { titleKey: 'nav.userVerification', url: '/admin/verification', icon: CheckSquare },
+  { titleKey: 'nav.facilitatorOnboarding', url: '/admin/teacher-onboarding', icon: Users },
+  { titleKey: 'nav.classCapacity', url: '/admin/class-capacity', icon: Calendar },
 ];
 
-const financeNav = [
-  { title: 'Overview', url: '/admin', icon: LayoutDashboard },
-  { title: 'Subscriptions', url: '/admin/subscriptions', icon: DollarSign },
-  { title: 'Payouts', url: '/admin/payouts', icon: DollarSign },
-  { title: 'Refunds', url: '/admin/refunds', icon: ClipboardList },
+const financeNav: NavItem[] = [
+  { titleKey: 'nav.overview', url: '/admin', icon: LayoutDashboard },
+  { titleKey: 'nav.subscriptions', url: '/admin/subscriptions', icon: DollarSign },
+  { titleKey: 'nav.payouts', url: '/admin/payouts', icon: DollarSign },
+  { titleKey: 'nav.refunds', url: '/admin/refunds', icon: ClipboardList },
 ];
 
-const contentNav = [
-  { title: 'Overview', url: '/admin', icon: LayoutDashboard },
-  { title: 'Approval Queue', url: '/admin/content', icon: CheckSquare },
-  { title: 'Publishing Calendar', url: '/admin/publishing-calendar', icon: Calendar },
-  { title: 'Frameworks', url: '/admin/frameworks', icon: BookOpen },
+const contentNav: NavItem[] = [
+  { titleKey: 'nav.overview', url: '/admin', icon: LayoutDashboard },
+  { titleKey: 'nav.approvalQueue', url: '/admin/content', icon: CheckSquare },
+  { titleKey: 'nav.publishingCalendar', url: '/admin/publishing-calendar', icon: Calendar },
+  { titleKey: 'nav.frameworks', url: '/admin/frameworks', icon: BookOpen },
 ];
 
-const studentNav = [
-  { title: 'Dashboard', url: '/student', icon: LayoutDashboard },
-  { title: 'Content Library', url: '/student/content', icon: BookOpen },
-  { title: 'Book a Class', url: '/student/book', icon: Calendar },
-  { title: 'My Classes', url: '/student/classes', icon: Mic },
+const studentNav: NavItem[] = [
+  { titleKey: 'nav.dashboard', url: '/student', icon: LayoutDashboard },
+  { titleKey: 'nav.contentLibrary', url: '/student/content', icon: BookOpen },
+  { titleKey: 'nav.bookClass', url: '/student/book', icon: Calendar },
+  { titleKey: 'nav.myClasses', url: '/student/classes', icon: Mic },
 ];
 
-const facilitatorNav = [
-  { title: 'Dashboard', url: '/teacher', icon: LayoutDashboard },
-  { title: 'Schedule', url: '/teacher/schedule', icon: Calendar },
-  { title: 'Student Agendas', url: '/teacher/agendas', icon: FileText },
-  { title: 'Income', url: '/teacher/income', icon: DollarSign },
+const facilitatorNav: NavItem[] = [
+  { titleKey: 'nav.dashboard', url: '/teacher', icon: LayoutDashboard },
+  { titleKey: 'nav.schedule', url: '/teacher/schedule', icon: Calendar },
+  { titleKey: 'nav.studentAgendas', url: '/teacher/agendas', icon: FileText },
+  { titleKey: 'nav.income', url: '/teacher/income', icon: DollarSign },
 ];
 
-const hrNav = [
-  { title: 'HR Dashboard', url: '/hr', icon: LayoutDashboard },
+const hrNav: NavItem[] = [
+  { titleKey: 'nav.hrDashboard', url: '/hr', icon: LayoutDashboard },
 ];
 
-function getNavForRole(role: AppRole | null) {
+function getNavForRole(role: AppRole | null): NavItem[] {
   switch (role) {
     case 'super_admin': return superAdminNav;
     case 'sub_admin_ops': return opsNav;
@@ -92,6 +82,7 @@ function getNavForRole(role: AppRole | null) {
 }
 
 export function AdminSidebar() {
+  const { t } = useTranslation();
   const { activeRole, setActiveRole, roles, profile, signOut } = useAuth();
   const navItems = getNavForRole(activeRole);
 
@@ -104,7 +95,7 @@ export function AdminSidebar() {
           </div>
           <div>
             <p className="font-bold text-sidebar-foreground text-sm">Feb3</p>
-            <p className="text-[11px] text-sidebar-foreground/60">Fluent with TED</p>
+            <p className="text-[11px] text-sidebar-foreground/60">{t('brand.sidebarTagline')}</p>
           </div>
         </div>
       </SidebarHeader>
@@ -119,7 +110,7 @@ export function AdminSidebar() {
             </SelectTrigger>
             <SelectContent>
               {roles.map(r => (
-                <SelectItem key={r} value={r} className="text-xs">{ROLE_LABELS[r]}</SelectItem>
+                <SelectItem key={r} value={r} className="text-xs">{t(`roles.${r}`)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -129,16 +120,16 @@ export function AdminSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/50 text-[11px] uppercase tracking-wider">
-            Navigation
+            {t('nav.section')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey + item.url}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} end={item.url === '/admin' || item.url === '/student' || item.url === '/teacher' || item.url === '/hr'} className="text-sidebar-foreground/80 hover:bg-sidebar-accent" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium">
                       <item.icon className="h-4 w-4 mr-2" />
-                      <span>{item.title}</span>
+                      <span>{t(item.titleKey)}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -157,10 +148,10 @@ export function AdminSidebar() {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-sidebar-foreground truncate">{profile?.full_name || 'User'}</p>
-            <p className="text-[11px] text-sidebar-foreground/50 truncate">{activeRole ? ROLE_LABELS[activeRole] : 'No role'}</p>
+            <p className="text-xs font-medium text-sidebar-foreground truncate">{profile?.full_name || t('common.user')}</p>
+            <p className="text-[11px] text-sidebar-foreground/50 truncate">{activeRole ? t(`roles.${activeRole}`) : t('common.noRole')}</p>
           </div>
-          <button onClick={signOut} className="text-sidebar-foreground/50 hover:text-sidebar-foreground">
+          <button onClick={signOut} className="text-sidebar-foreground/50 hover:text-sidebar-foreground" aria-label="Sign out">
             <LogOut className="h-4 w-4" />
           </button>
         </div>

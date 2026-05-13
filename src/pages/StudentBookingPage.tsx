@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { format, addHours } from 'date-fns';
+import { ptBR as ptBRLocale, enUS } from 'date-fns/locale';
 import { Calendar, User, Clock, FileText } from 'lucide-react';
 
 interface FacilitatorOption {
@@ -27,6 +28,7 @@ interface SlotOption {
 }
 
 export default function StudentBookingPage() {
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const [step, setStep] = useState(1);
@@ -37,6 +39,8 @@ export default function StudentBookingPage() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [agenda, setAgenda] = useState('');
   const [booking, setBooking] = useState(false);
+
+  const locale = i18n.language?.startsWith('en') ? enUS : ptBRLocale;
 
   useEffect(() => {
     if (step === 2 && language) loadFacilitators();
@@ -67,14 +71,13 @@ export default function StudentBookingPage() {
 
   const handleBook = async () => {
     if (!user || !selectedSlot || agenda.length < 50) {
-      toast({ title: 'Agenda required', description: 'Please write at least 50 characters about what you want to work on.', variant: 'destructive' });
+      toast({ title: t('booking.agendaRequired'), description: t('booking.agendaMin'), variant: 'destructive' });
       return;
     }
 
     setBooking(true);
     const slot = slots.find(s => s.id === selectedSlot)!;
 
-    // Create class
     const { data: cls, error: classError } = await supabase.from('classes').insert({
       type: 'private',
       language,
@@ -85,12 +88,11 @@ export default function StudentBookingPage() {
     }).select().single();
 
     if (classError || !cls) {
-      toast({ title: 'Booking failed', description: classError?.message || 'Unknown error', variant: 'destructive' });
+      toast({ title: t('booking.bookingFailed'), description: classError?.message || 'Unknown error', variant: 'destructive' });
       setBooking(false);
       return;
     }
 
-    // Create booking
     await supabase.from('class_bookings').insert({
       class_id: cls.id,
       student_id: user.id,
@@ -98,12 +100,17 @@ export default function StudentBookingPage() {
       agenda_submitted_at: new Date().toISOString(),
     });
 
-    // Increment slot bookings
     await supabase.from('teacher_availability').update({
       current_bookings: slot.current_bookings + 1,
     }).eq('id', selectedSlot);
 
-    toast({ title: 'Class booked!', description: `Your class is scheduled for ${format(new Date(slot.slot_date), 'MMM d')} at ${slot.start_time}.` });
+    toast({
+      title: t('booking.classBooked'),
+      description: t('booking.classBookedDesc', {
+        date: format(new Date(slot.slot_date), 'MMM d', { locale }),
+        time: slot.start_time,
+      }),
+    });
     setBooking(false);
     setStep(1);
     setLanguage('');
@@ -115,14 +122,13 @@ export default function StudentBookingPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Book a Class</h1>
-        <p className="text-sm text-muted-foreground">Step {step} of 4</p>
+        <h1 className="text-2xl font-bold text-navy">{t('booking.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('booking.stepOf', { n: step })}</p>
       </div>
 
-      {/* Step 1: Language */}
       {step === 1 && (
         <Card>
-          <CardHeader><CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5" /> Select Language</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5" /> {t('booking.selectLanguage')}</CardTitle></CardHeader>
           <CardContent className="grid grid-cols-2 gap-3">
             {['en', 'es', 'fr', 'pt'].map(lang => (
               <Button
@@ -138,49 +144,47 @@ export default function StudentBookingPage() {
         </Card>
       )}
 
-      {/* Step 2: Facilitator */}
       {step === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> Choose a Facilitator</CardTitle>
+            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" /> {t('booking.chooseFacilitator')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {facilitators.length === 0 ? (
-              <p className="text-muted-foreground">No facilitators available for this language yet.</p>
+              <p className="text-muted-foreground">{t('booking.noFacilitators')}</p>
             ) : (
-              facilitators.map(t => (
+              facilitators.map(tch => (
                 <div
-                  key={t.id}
-                  onClick={() => { setSelectedFacilitator(t.id); setStep(3); }}
+                  key={tch.id}
+                  onClick={() => { setSelectedFacilitator(tch.id); setStep(3); }}
                   className={`p-4 rounded-lg border cursor-pointer transition-colors hover:border-primary/50 ${
-                    selectedFacilitator === t.id ? 'border-primary bg-primary/5' : ''
+                    selectedFacilitator === tch.id ? 'border-primary bg-primary/5' : ''
                   }`}
                 >
-                  <p className="font-medium">{t.profiles?.full_name || 'Facilitator'}</p>
-                  <p className="text-sm text-muted-foreground">{t.bio || 'No bio available'}</p>
+                  <p className="font-medium">{tch.profiles?.full_name || t('booking.facilitator')}</p>
+                  <p className="text-sm text-muted-foreground">{tch.bio || t('booking.noBio')}</p>
                   <div className="flex gap-1 mt-2">
-                    {t.languages_taught.map(l => (
+                    {tch.languages_taught.map(l => (
                       <Badge key={l} variant="outline" className="text-xs">{l.toUpperCase()}</Badge>
                     ))}
                   </div>
                 </div>
               ))
             )}
-            <Button variant="secondary" onClick={() => setStep(1)}>← Back</Button>
+            <Button variant="secondary" onClick={() => setStep(1)}>← {t('common.back')}</Button>
           </CardContent>
         </Card>
       )}
 
-      {/* Step 3: Time Slot */}
       {step === 3 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Clock className="h-5 w-5" /> Select Date & Time</CardTitle>
+            <CardTitle className="flex items-center gap-2"><Clock className="h-5 w-5" /> {t('booking.selectDateTime')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <p className="text-xs text-muted-foreground">Only slots ≥72 hours from now are shown (agenda submission requirement).</p>
+            <p className="text-xs text-muted-foreground">{t('booking.slotsHelp')}</p>
             {slots.length === 0 ? (
-              <p className="text-muted-foreground">No available slots. Please check back later or choose another facilitator.</p>
+              <p className="text-muted-foreground">{t('booking.noSlots')}</p>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {slots.map(s => (
@@ -190,39 +194,36 @@ export default function StudentBookingPage() {
                     className="h-auto py-2 flex flex-col"
                     onClick={() => { setSelectedSlot(s.id); setStep(4); }}
                   >
-                    <span className="font-medium">{format(new Date(s.slot_date), 'EEE, MMM d')}</span>
+                    <span className="font-medium">{format(new Date(s.slot_date), 'EEE, MMM d', { locale })}</span>
                     <span className="text-xs">{s.start_time} – {s.end_time}</span>
                   </Button>
                 ))}
               </div>
             )}
-            <Button variant="secondary" onClick={() => setStep(2)}>← Back</Button>
+            <Button variant="secondary" onClick={() => setStep(2)}>← {t('common.back')}</Button>
           </CardContent>
         </Card>
       )}
 
-      {/* Step 4: Agenda */}
       {step === 4 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" /> Submit Your Agenda</CardTitle>
+            <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" /> {t('booking.submitAgenda')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              What do you want to work on? What content will you bring? (min 50 characters)
-            </p>
+            <p className="text-sm text-muted-foreground">{t('booking.agendaHelp')}</p>
             <Textarea
               value={agenda}
               onChange={e => setAgenda(e.target.value)}
-              placeholder="I'd like to discuss..."
+              placeholder={t('booking.agendaPlaceholder')}
               rows={5}
               maxLength={500}
             />
             <p className="text-xs text-muted-foreground text-right">{agenda.length}/500</p>
             <div className="flex gap-2">
-              <Button variant="secondary" onClick={() => setStep(3)}>← Back</Button>
+              <Button variant="secondary" onClick={() => setStep(3)}>← {t('common.back')}</Button>
               <Button onClick={handleBook} disabled={booking || agenda.length < 50} className="flex-1">
-                {booking ? 'Booking...' : 'Confirm Booking'}
+                {booking ? t('booking.booking') : t('booking.confirmBooking')}
               </Button>
             </div>
           </CardContent>
