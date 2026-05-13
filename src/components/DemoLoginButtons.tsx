@@ -3,21 +3,23 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { GraduationCap, BookOpen, Shield, Settings, DollarSign, Newspaper, Building2 } from 'lucide-react';
 
 const DEMO_PASSWORD = 'demo123456';
 
 const DEMO_ACCOUNTS = [
-  { role: 'student', email: 'demo.student@feb3.app', name: 'Ana Silva', label: 'Student', icon: GraduationCap, color: 'bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 border-emerald-500/20', roleSetup: 'student' },
-  { role: 'teacher', email: 'demo.facilitator@feb3.app', name: 'Carlos Mendes', label: 'Facilitator', icon: BookOpen, color: 'bg-blue-500/10 text-blue-700 hover:bg-blue-500/20 border-blue-500/20', roleSetup: 'teacher' },
-  { role: 'company_hr', email: 'demo.hr@feb3.app', name: 'Mariana Costa', label: 'Company HR', icon: Building2, color: 'bg-purple-500/10 text-purple-700 hover:bg-purple-500/20 border-purple-500/20', roleSetup: 'company_hr' },
-  { role: 'super_admin', email: 'demo.admin@feb3.app', name: 'Rafael Admin', label: 'Super Admin', icon: Shield, color: 'bg-red-500/10 text-red-700 hover:bg-red-500/20 border-red-500/20', roleSetup: '' },
-  { role: 'sub_admin_ops', email: 'demo.ops@feb3.app', name: 'Ops Manager', label: 'Ops Admin', icon: Settings, color: 'bg-orange-500/10 text-orange-700 hover:bg-orange-500/20 border-orange-500/20', roleSetup: '' },
-  { role: 'sub_admin_finance', email: 'demo.finance@feb3.app', name: 'Finance Lead', label: 'Finance Admin', icon: DollarSign, color: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 border-yellow-500/20', roleSetup: '' },
-  { role: 'sub_admin_content', email: 'demo.content@feb3.app', name: 'Content Curator', label: 'Content Admin', icon: Newspaper, color: 'bg-teal-500/10 text-teal-700 hover:bg-teal-500/20 border-teal-500/20', roleSetup: '' },
+  { role: 'student', email: 'demo.student@feb3.app', name: 'Ana Silva', labelKey: 'roles.student', icon: GraduationCap, color: 'bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 border-emerald-500/20', roleSetup: 'student' },
+  { role: 'teacher', email: 'demo.facilitator@feb3.app', name: 'Carlos Mendes', labelKey: 'roles.teacher', icon: BookOpen, color: 'bg-blue-500/10 text-blue-700 hover:bg-blue-500/20 border-blue-500/20', roleSetup: 'teacher' },
+  { role: 'company_hr', email: 'demo.hr@feb3.app', name: 'Mariana Costa', labelKey: 'roles.company_hr', icon: Building2, color: 'bg-purple-500/10 text-purple-700 hover:bg-purple-500/20 border-purple-500/20', roleSetup: 'company_hr' },
+  { role: 'super_admin', email: 'demo.admin@feb3.app', name: 'Rafael Admin', labelKey: 'roles.super_admin', icon: Shield, color: 'bg-red-500/10 text-red-700 hover:bg-red-500/20 border-red-500/20', roleSetup: '' },
+  { role: 'sub_admin_ops', email: 'demo.ops@feb3.app', name: 'Ops Manager', labelKey: 'roles.sub_admin_ops', icon: Settings, color: 'bg-orange-500/10 text-orange-700 hover:bg-orange-500/20 border-orange-500/20', roleSetup: '' },
+  { role: 'sub_admin_finance', email: 'demo.finance@feb3.app', name: 'Finance Lead', labelKey: 'roles.sub_admin_finance', icon: DollarSign, color: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 border-yellow-500/20', roleSetup: '' },
+  { role: 'sub_admin_content', email: 'demo.content@feb3.app', name: 'Content Curator', labelKey: 'roles.sub_admin_content', icon: Newspaper, color: 'bg-teal-500/10 text-teal-700 hover:bg-teal-500/20 border-teal-500/20', roleSetup: '' },
 ];
 
 export default function DemoLoginButtons() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [loadingRole, setLoadingRole] = useState<string | null>(null);
@@ -49,19 +51,18 @@ export default function DemoLoginButtons() {
     });
 
     if (fnError) {
-      toast({ title: 'Demo login failed', description: fnError.message, variant: 'destructive' });
+      toast({ title: t('auth.demoLoginFailed'), description: fnError.message, variant: 'destructive' });
       setLoadingRole(null);
       return;
     }
 
-    // Now sign in
     const { error: finalSignIn } = await supabase.auth.signInWithPassword({
       email: account.email,
       password: DEMO_PASSWORD,
     });
 
     if (finalSignIn) {
-      toast({ title: 'Demo login failed', description: finalSignIn.message, variant: 'destructive' });
+      toast({ title: t('auth.demoLoginFailed'), description: finalSignIn.message, variant: 'destructive' });
     } else {
       navigate('/');
     }
@@ -74,7 +75,7 @@ export default function DemoLoginButtons() {
       <div className="relative">
         <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">Quick Demo Access</span>
+          <span className="bg-card px-2 text-muted-foreground">{t('auth.quickDemo')}</span>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -94,7 +95,7 @@ export default function DemoLoginButtons() {
               ) : (
                 <Icon className="h-3.5 w-3.5" />
               )}
-              {account.label}
+              {t(account.labelKey)}
             </Button>
           );
         })}
