@@ -1,29 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { useTranslation } from 'react-i18next';
 import { dashboardMetrics, healthCards, recentActivity } from '@/lib/mock-data';
 import { DollarSign, Users, GraduationCap, FileText, TrendingUp, Building2, UserPlus, XCircle, BookOpen, Calendar } from 'lucide-react';
 
 const metricIcons = [DollarSign, Users, GraduationCap, FileText];
-const metricEntries = [
-  { label: 'Total MRR', value: dashboardMetrics.totalMRR },
-  { label: 'Active Subscriptions', value: dashboardMetrics.activeSubscriptions.toLocaleString() },
-  { label: 'Active Facilitators', value: dashboardMetrics.activeTeachers },
-  { label: 'Content Published', value: dashboardMetrics.contentPublished },
-];
 
 const activityIcons: Record<string, React.ElementType> = {
   company: Building2, teacher: UserPlus, cancel: XCircle, content: BookOpen, class: Calendar,
 };
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
+  const metricEntries = [
+    { label: t('admin.totalMRR'), value: dashboardMetrics.totalMRR },
+    { label: t('admin.activeSubscriptions'), value: dashboardMetrics.activeSubscriptions.toLocaleString() },
+    { label: t('admin.activeFacilitators'), value: dashboardMetrics.activeTeachers },
+    { label: t('admin.contentPublished'), value: dashboardMetrics.contentPublished },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Command Center</h1>
-        <p className="text-sm text-muted-foreground">Platform overview and key metrics</p>
+        <h1 className="text-2xl font-bold text-navy">{t('admin.commandCenter')}</h1>
+        <p className="text-sm text-muted-foreground">{t('admin.overviewDesc')}</p>
       </div>
 
-      {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {metricEntries.map((m, i) => {
           const Icon = metricIcons[i];
@@ -43,9 +44,8 @@ export default function AdminDashboard() {
         })}
       </div>
 
-      {/* Health Cards */}
       <div>
-        <h2 className="text-lg font-semibold text-foreground mb-3">Platform Health</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-3">{t('admin.platformHealth')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {healthCards.map((h) => (
             <Card key={h.label}>
@@ -62,9 +62,8 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Activity Feed */}
       <div>
-        <h2 className="text-lg font-semibold text-foreground mb-3">Recent Activity</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-3">{t('admin.recentActivity')}</h2>
         <Card>
           <CardContent className="p-0">
             <div className="divide-y">

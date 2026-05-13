@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTranslation } from 'react-i18next';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import { ptBR as ptBRLocale, enUS } from 'date-fns/locale';
 
 interface BookingRow {
   id: string;
@@ -23,9 +24,12 @@ interface BookingRow {
 }
 
 export default function StudentClassHistory() {
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [bookings, setBookings] = useState<BookingRow[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const locale = i18n.language?.startsWith('en') ? enUS : ptBRLocale;
 
   useEffect(() => {
     if (!user) return;
@@ -53,43 +57,43 @@ export default function StudentClassHistory() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Badge variant={b.classes.type === 'private' ? 'default' : 'secondary'}>{b.classes.type}</Badge>
-            <span className="font-medium">{format(new Date(b.classes.scheduled_at), 'EEE, MMM d · HH:mm')}</span>
+            <span className="font-medium">{format(new Date(b.classes.scheduled_at), 'EEE, MMM d · HH:mm', { locale })}</span>
             <Badge variant="outline">{b.classes.language.toUpperCase()}</Badge>
           </div>
           <Badge variant={b.cancelled_at ? 'destructive' : b.attended ? 'default' : 'secondary'}>
-            {b.cancelled_at ? 'Cancelled' : b.attended ? 'Attended' : b.classes.status}
+            {b.cancelled_at ? t('classHistory.cancelled') : b.attended ? t('classHistory.attended') : b.classes.status}
           </Badge>
         </div>
-        {b.agenda_text && <p className="text-sm text-muted-foreground">Agenda: {b.agenda_text}</p>}
-        {b.teacher_notes && <p className="text-sm text-foreground">Teacher note: {b.teacher_notes}</p>}
+        {b.agenda_text && <p className="text-sm text-muted-foreground">{t('classHistory.agenda')}: {b.agenda_text}</p>}
+        {b.teacher_notes && <p className="text-sm text-foreground">{t('classHistory.facilitatorNote')}: {b.teacher_notes}</p>}
       </div>
     );
   };
 
-  if (loading) return <div className="p-6 text-muted-foreground">Loading...</div>;
+  if (loading) return <div className="p-6 text-muted-foreground">{t('common.loading')}</div>;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">My Classes</h1>
-        <p className="text-sm text-muted-foreground">Upcoming and past sessions</p>
+        <h1 className="text-2xl font-bold text-navy">{t('classHistory.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('classHistory.subtitle')}</p>
       </div>
 
       <Tabs defaultValue="upcoming">
         <TabsList>
-          <TabsTrigger value="upcoming">Upcoming ({upcoming.length})</TabsTrigger>
-          <TabsTrigger value="past">Past ({past.length})</TabsTrigger>
+          <TabsTrigger value="upcoming">{t('classHistory.upcoming')} ({upcoming.length})</TabsTrigger>
+          <TabsTrigger value="past">{t('classHistory.past')} ({past.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="upcoming" className="space-y-3 mt-4">
           {upcoming.length === 0 ? (
-            <Card><CardContent className="p-6 text-center text-muted-foreground">No upcoming classes. Book one!</CardContent></Card>
+            <Card><CardContent className="p-6 text-center text-muted-foreground">{t('classHistory.noUpcoming')}</CardContent></Card>
           ) : upcoming.map(renderBooking)}
         </TabsContent>
 
         <TabsContent value="past" className="space-y-3 mt-4">
           {past.length === 0 ? (
-            <Card><CardContent className="p-6 text-center text-muted-foreground">No past classes yet.</CardContent></Card>
+            <Card><CardContent className="p-6 text-center text-muted-foreground">{t('classHistory.noPast')}</CardContent></Card>
           ) : past.map(renderBooking)}
         </TabsContent>
       </Tabs>

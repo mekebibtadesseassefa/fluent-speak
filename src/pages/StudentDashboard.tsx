@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, Calendar, Flame, Clock, TrendingUp, Mic } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import StudentOnboardingWizard from './StudentOnboardingWizard';
 
 interface ContentItem {
@@ -22,6 +23,7 @@ interface ContentItem {
 const LANG_FLAGS: Record<string, string> = { en: '🇺🇸', es: '🇪🇸', fr: '🇫🇷', pt: '🇧🇷' };
 
 export default function StudentDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [weeklyContent, setWeeklyContent] = useState<ContentItem[]>([]);
   const [reflections, setReflections] = useState<{ confidence_score: number }[]>([]);
@@ -97,10 +99,9 @@ export default function StudentDashboard() {
     : '—';
 
   if (loading) {
-    return <div className="p-6 text-muted-foreground">Loading your dashboard...</div>;
+    return <div className="p-6 text-muted-foreground">{t('studentDashboard.loading')}</div>;
   }
 
-  // Show onboarding wizard if not completed
   if (onboardingComplete === false) {
     return (
       <StudentOnboardingWizard
@@ -115,11 +116,10 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Your Dashboard</h1>
-        <p className="text-sm text-muted-foreground">This week's learning journey</p>
+        <h1 className="text-2xl font-bold text-navy">{t('studentDashboard.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('studentDashboard.subtitle')}</p>
       </div>
 
-      {/* Progress Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
@@ -127,8 +127,8 @@ export default function StudentDashboard() {
               <Flame className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Speaking Streak</p>
-              <p className="text-2xl font-bold text-foreground">0 sessions</p>
+              <p className="text-sm text-muted-foreground">{t('studentDashboard.speakingStreak')}</p>
+              <p className="text-2xl font-bold text-foreground">0 {t('studentDashboard.sessions')}</p>
             </div>
           </CardContent>
         </Card>
@@ -138,8 +138,8 @@ export default function StudentDashboard() {
               <Clock className="h-5 w-5 text-accent" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Speaking Time</p>
-              <p className="text-2xl font-bold text-foreground">0h this month</p>
+              <p className="text-sm text-muted-foreground">{t('studentDashboard.speakingTime')}</p>
+              <p className="text-2xl font-bold text-foreground">{t('studentDashboard.hoursThisMonth', { n: 0 })}</p>
             </div>
           </CardContent>
         </Card>
@@ -149,24 +149,23 @@ export default function StudentDashboard() {
               <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Confidence</p>
+              <p className="text-sm text-muted-foreground">{t('studentDashboard.confidence')}</p>
               <p className="text-2xl font-bold text-foreground">{avgConfidence}/5</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* This Week's Content */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <BookOpen className="h-5 w-5 text-primary" />
-            This Week's Content
+            {t('studentDashboard.weeklyContent')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           {weeklyContent.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No content published for this week yet.</p>
+            <p className="text-muted-foreground text-sm">{t('studentDashboard.noWeeklyContent')}</p>
           ) : (
             <div className="space-y-3">
               {weeklyContent.map(item => (
@@ -182,7 +181,7 @@ export default function StudentDashboard() {
                     </div>
                   </div>
                   <Link to={`/student/content/${item.id}`}>
-                    <Button size="sm">Start Self-Study</Button>
+                    <Button size="sm">{t('studentDashboard.startSelfStudy')}</Button>
                   </Link>
                 </div>
               ))}
@@ -191,13 +190,12 @@ export default function StudentDashboard() {
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link to="/student/content">
           <Card className="hover:border-primary/50 transition-colors cursor-pointer">
             <CardContent className="p-4 flex items-center gap-3">
               <BookOpen className="h-5 w-5 text-primary" />
-              <span className="font-medium">Browse All Content</span>
+              <span className="font-medium">{t('studentDashboard.browseAll')}</span>
             </CardContent>
           </Card>
         </Link>
@@ -205,7 +203,7 @@ export default function StudentDashboard() {
           <Card className="hover:border-primary/50 transition-colors cursor-pointer">
             <CardContent className="p-4 flex items-center gap-3">
               <Calendar className="h-5 w-5 text-accent" />
-              <span className="font-medium">Book a Class</span>
+              <span className="font-medium">{t('studentDashboard.bookClass')}</span>
             </CardContent>
           </Card>
         </Link>
@@ -213,7 +211,7 @@ export default function StudentDashboard() {
           <Card className="hover:border-primary/50 transition-colors cursor-pointer">
             <CardContent className="p-4 flex items-center gap-3">
               <Mic className="h-5 w-5 text-success" />
-              <span className="font-medium">My Class History</span>
+              <span className="font-medium">{t('studentDashboard.classHistory')}</span>
             </CardContent>
           </Card>
         </Link>

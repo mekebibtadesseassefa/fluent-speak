@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, DollarSign, Users, Clock, BookOpen, MessageSquare } from 'lucide-react';
+import { Calendar, DollarSign, Users, Clock, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 export default function TeacherDashboardPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [todayClasses, setTodayClasses] = useState<any[]>([]);
   const [weekClasses, setWeekClasses] = useState<any[]>([]);
@@ -48,22 +50,21 @@ export default function TeacherDashboardPage() {
     setLoading(false);
   };
 
-  if (loading) return <div className="p-6 text-muted-foreground">Loading...</div>;
+  if (loading) return <div className="p-6 text-muted-foreground">{t('common.loading')}</div>;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Facilitator Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Welcome back! Here's your facilitation overview.</p>
+        <h1 className="text-2xl font-bold text-navy">{t('facilitatorDashboard.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('facilitatorDashboard.subtitle')}</p>
       </div>
 
-      {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-accent/10"><Calendar className="h-5 w-5 text-accent" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Today's Classes</p>
+              <p className="text-sm text-muted-foreground">{t('facilitatorDashboard.todayClasses')}</p>
               <p className="text-2xl font-bold">{todayClasses.length}</p>
             </div>
           </CardContent>
@@ -72,8 +73,8 @@ export default function TeacherDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary/10"><Clock className="h-5 w-5 text-primary" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">This Week</p>
-              <p className="text-2xl font-bold">{weekClasses.length} classes</p>
+              <p className="text-sm text-muted-foreground">{t('facilitatorDashboard.thisWeek')}</p>
+              <p className="text-2xl font-bold">{t('facilitatorDashboard.classesCount', { n: weekClasses.length })}</p>
             </div>
           </CardContent>
         </Card>
@@ -81,7 +82,7 @@ export default function TeacherDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-success/10"><DollarSign className="h-5 w-5 text-success" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Earnings</p>
+              <p className="text-sm text-muted-foreground">{t('facilitatorDashboard.earnings')}</p>
               <p className="text-2xl font-bold">R$ 0</p>
             </div>
           </CardContent>
@@ -90,19 +91,18 @@ export default function TeacherDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-admin/10"><Users className="h-5 w-5 text-admin" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Languages</p>
+              <p className="text-sm text-muted-foreground">{t('facilitatorDashboard.languages')}</p>
               <p className="text-2xl font-bold">{teacherProfile?.languages_taught?.length || 0}</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Today's Classes */}
       <Card>
-        <CardHeader><CardTitle className="text-lg">Today's Classes</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-lg">{t('facilitatorDashboard.todayClasses')}</CardTitle></CardHeader>
         <CardContent>
           {todayClasses.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No classes scheduled for today.</p>
+            <p className="text-muted-foreground text-sm">{t('facilitatorDashboard.noTodayClasses')}</p>
           ) : (
             <div className="space-y-3">
               {todayClasses.map(cls => (
@@ -111,10 +111,10 @@ export default function TeacherDashboardPage() {
                     <Badge variant={cls.type === 'private' ? 'default' : 'secondary'}>{cls.type}</Badge>
                     <div>
                       <p className="font-medium">{format(new Date(cls.scheduled_at), 'HH:mm')} — {cls.language.toUpperCase()}</p>
-                      <p className="text-xs text-muted-foreground">{cls.class_bookings?.length || 0} student(s)</p>
+                      <p className="text-xs text-muted-foreground">{t('facilitatorDashboard.students', { n: cls.class_bookings?.length || 0 })}</p>
                     </div>
                   </div>
-                  <Button size="sm" variant="secondary">View</Button>
+                  <Button size="sm" variant="secondary">{t('common.view')}</Button>
                 </div>
               ))}
             </div>
@@ -122,13 +122,12 @@ export default function TeacherDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link to="/teacher/schedule">
           <Card className="hover:border-accent/50 transition-colors cursor-pointer">
             <CardContent className="p-4 flex items-center gap-3">
               <Calendar className="h-5 w-5 text-accent" />
-              <span className="font-medium">Manage Schedule</span>
+              <span className="font-medium">{t('facilitatorDashboard.manageSchedule')}</span>
             </CardContent>
           </Card>
         </Link>
@@ -136,7 +135,7 @@ export default function TeacherDashboardPage() {
           <Card className="hover:border-accent/50 transition-colors cursor-pointer">
             <CardContent className="p-4 flex items-center gap-3">
               <BookOpen className="h-5 w-5 text-primary" />
-              <span className="font-medium">View Agendas</span>
+              <span className="font-medium">{t('facilitatorDashboard.viewAgendas')}</span>
             </CardContent>
           </Card>
         </Link>
@@ -144,7 +143,7 @@ export default function TeacherDashboardPage() {
           <Card className="hover:border-accent/50 transition-colors cursor-pointer">
             <CardContent className="p-4 flex items-center gap-3">
               <DollarSign className="h-5 w-5 text-success" />
-              <span className="font-medium">Income & Payouts</span>
+              <span className="font-medium">{t('facilitatorDashboard.incomePayouts')}</span>
             </CardContent>
           </Card>
         </Link>

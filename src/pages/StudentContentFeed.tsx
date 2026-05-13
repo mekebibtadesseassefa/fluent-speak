@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -13,7 +14,6 @@ import { Link } from 'react-router-dom';
 
 const LANG_FLAGS: Record<string, string> = { en: '🇺🇸', es: '🇪🇸', fr: '🇫🇷', pt: '🇧🇷' };
 
-// Map onboarding content_stream ids to framework names for filtering
 const STREAM_TO_FRAMEWORK: Record<string, string> = {
   ted: 'Fluent with TED',
   news: 'Fluent with News',
@@ -39,6 +39,7 @@ interface ContentRow {
 }
 
 export default function StudentContentFeed() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [content, setContent] = useState<ContentRow[]>([]);
   const [search, setSearch] = useState('');
@@ -55,7 +56,6 @@ export default function StudentContentFeed() {
   }, [user, showAll]);
 
   const loadPreferencesAndContent = async () => {
-    // Load preferences first
     const { data: prefs } = await supabase
       .from('student_preferences')
       .select('languages, content_streams')
@@ -67,7 +67,6 @@ export default function StudentContentFeed() {
     setPrefLanguages(langs);
     setPrefStreams(streams);
 
-    // Build query — filter by preferred languages if any
     let query = supabase
       .from('content_items')
       .select('id, title, language, level_min, level_max, duration_seconds, status, perspective, topic_tags, published_week, published_year, content_frameworks(name, color)')
@@ -105,19 +104,19 @@ export default function StudentContentFeed() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Content Library</h1>
-        <p className="text-sm text-muted-foreground">Browse and study real-world content</p>
+        <h1 className="text-2xl font-bold text-navy">{t('contentFeed.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('contentFeed.subtitle')}</p>
       </div>
 
       <div className="flex gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search content..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
+          <Input placeholder={t('contentFeed.searchPlaceholder')} value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
         </div>
         <Select value={langFilter} onValueChange={setLangFilter}>
           <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{prefLanguages.length > 0 ? 'My Languages' : 'All Languages'}</SelectItem>
+            <SelectItem value="all">{prefLanguages.length > 0 ? t('contentFeed.myLanguages') : t('contentFeed.allLanguages')}</SelectItem>
             <SelectItem value="en">English</SelectItem>
             <SelectItem value="es">Español</SelectItem>
             <SelectItem value="fr">Français</SelectItem>
@@ -127,7 +126,7 @@ export default function StudentContentFeed() {
       </div>
       {prefStreams.length > 0 && !showAll && (
         <div className="flex flex-wrap gap-1.5">
-          <span className="text-xs text-muted-foreground mr-1">Streams:</span>
+          <span className="text-xs text-muted-foreground mr-1">{t('contentFeed.streams')}</span>
           {prefStreams.map(s => (
             <Badge key={s} variant="secondary" className="text-xs capitalize">{s.replace('_', ' ')}</Badge>
           ))}
@@ -137,14 +136,14 @@ export default function StudentContentFeed() {
       {(prefLanguages.length > 0 || prefStreams.length > 0) && (
         <div className="flex items-center gap-2">
           <Switch id="show-all" checked={showAll} onCheckedChange={setShowAll} />
-          <Label htmlFor="show-all" className="text-sm cursor-pointer">Show all content</Label>
+          <Label htmlFor="show-all" className="text-sm cursor-pointer">{t('contentFeed.showAll')}</Label>
         </div>
       )}
 
       {loading ? (
-        <p className="text-muted-foreground">Loading content...</p>
+        <p className="text-muted-foreground">{t('contentFeed.loading')}</p>
       ) : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-muted-foreground">No content found.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-muted-foreground">{t('contentFeed.noContent')}</CardContent></Card>
       ) : (
         <div className="space-y-3">
           {filtered.map(item => (
@@ -163,7 +162,7 @@ export default function StudentContentFeed() {
                         <Badge variant="outline" className="text-xs capitalize">{item.perspective.replace('_', ' ')}</Badge>
                       )}
                       {item.duration_seconds && (
-                        <Badge variant="outline" className="text-xs">{Math.round(item.duration_seconds / 60)} min</Badge>
+                        <Badge variant="outline" className="text-xs">{Math.round(item.duration_seconds / 60)} {t('common.minutes')}</Badge>
                       )}
                       {item.published_week && (
                         <Badge variant="outline" className="text-xs font-mono">W{item.published_week}</Badge>
@@ -173,7 +172,7 @@ export default function StudentContentFeed() {
                 </div>
                 <Link to={`/student/content/${item.id}`}>
                   <Button size="sm" variant="secondary" className="gap-1">
-                    <Play className="h-3.5 w-3.5" /> Study
+                    <Play className="h-3.5 w-3.5" /> {t('contentFeed.study')}
                   </Button>
                 </Link>
               </CardContent>
