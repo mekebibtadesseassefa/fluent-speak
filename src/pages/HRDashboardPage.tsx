@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ interface EmployeeRow {
 }
 
 export default function HRDashboardPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [employees, setEmployees] = useState<EmployeeRow[]>([]);
   const [company, setCompany] = useState<any>(null);
@@ -29,7 +31,6 @@ export default function HRDashboardPage() {
   }, [user]);
 
   const loadData = async () => {
-    // Find user's company
     const { data: empRecord } = await supabase
       .from('company_employees')
       .select('company_id')
@@ -64,14 +65,14 @@ export default function HRDashboardPage() {
     !search || e.profiles?.full_name?.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (loading) return <div className="p-6 text-muted-foreground">Loading...</div>;
-  if (!company) return <div className="p-6 text-muted-foreground">No company found for your account.</div>;
+  if (loading) return <div className="p-6 text-muted-foreground">{t('common.loading')}</div>;
+  if (!company) return <div className="p-6 text-muted-foreground">{t('hr.noCompany')}</div>;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-navy">{company.name}</h1>
-        <p className="text-sm text-muted-foreground">HR Dashboard · Plan: {company.plan_type}</p>
+        <p className="text-sm text-muted-foreground">{t('hr.subtitle', { plan: company.plan_type })}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -79,7 +80,7 @@ export default function HRDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-success/10"><Users className="h-5 w-5 text-success" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Active Employees</p>
+              <p className="text-sm text-muted-foreground">{t('hr.activeEmployees')}</p>
               <p className="text-2xl font-bold">{activeCount}/{company.employee_limit}</p>
             </div>
           </CardContent>
@@ -88,7 +89,7 @@ export default function HRDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-accent/10"><Clock className="h-5 w-5 text-accent" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Pending Approval</p>
+              <p className="text-sm text-muted-foreground">{t('hr.pendingApproval')}</p>
               <p className="text-2xl font-bold">{pendingCount}</p>
             </div>
           </CardContent>
@@ -97,7 +98,7 @@ export default function HRDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary/10"><TrendingUp className="h-5 w-5 text-primary" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Join Code</p>
+              <p className="text-sm text-muted-foreground">{t('hr.joinCode')}</p>
               <p className="text-2xl font-bold font-mono">{company.join_code || '—'}</p>
             </div>
           </CardContent>
@@ -106,7 +107,7 @@ export default function HRDashboardPage() {
           <CardContent className="p-4 flex items-center gap-3">
             <div className="p-2 rounded-lg bg-navy/10"><Calendar className="h-5 w-5 text-navy" /></div>
             <div>
-              <p className="text-sm text-muted-foreground">Status</p>
+              <p className="text-sm text-muted-foreground">{t('common.status')}</p>
               <Badge className={company.status === 'active' ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'}>
                 {company.status}
               </Badge>
@@ -117,21 +118,21 @@ export default function HRDashboardPage() {
 
       <Card>
         <CardHeader className="flex-row items-center justify-between">
-          <CardTitle className="text-lg">Employees</CardTitle>
+          <CardTitle className="text-lg">{t('hr.employees')}</CardTitle>
           <div className="relative w-64">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
+            <Input placeholder={t('common.search')} value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
           </div>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>CPF</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Verified</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>{t('common.name')}</TableHead>
+                <TableHead>{t('hr.cpf')}</TableHead>
+                <TableHead>{t('common.status')}</TableHead>
+                <TableHead>{t('hr.verified')}</TableHead>
+                <TableHead>{t('common.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -141,13 +142,13 @@ export default function HRDashboardPage() {
                   <TableCell className="font-mono text-sm">{maskCPF(e.profiles?.cpf || null)}</TableCell>
                   <TableCell>
                     <Badge variant={e.active ? 'default' : 'secondary'}>
-                      {e.active ? 'Active' : e.approved_at ? 'Inactive' : 'Pending'}
+                      {e.active ? t('common.active') : e.approved_at ? t('common.inactive') : t('common.pending')}
                     </Badge>
                   </TableCell>
                   <TableCell>{e.verified_year || '—'}</TableCell>
                   <TableCell>
                     {!e.active && !e.approved_at && (
-                      <Button size="sm" variant="secondary">Approve</Button>
+                      <Button size="sm" variant="secondary">{t('common.approve')}</Button>
                     )}
                   </TableCell>
                 </TableRow>
