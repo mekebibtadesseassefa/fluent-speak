@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import DemoLoginButtons from '@/components/DemoLoginButtons';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -216,9 +215,6 @@ export default function AuthPage() {
                 </form>
               </TabsContent>
             </Tabs>
-            <div className="mt-6">
-              <DemoLoginButtons />
-            </div>
           </CardContent>
         </Card>
       </div>
