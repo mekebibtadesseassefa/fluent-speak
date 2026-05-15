@@ -8,6 +8,7 @@ import { AdminLayout } from "@/components/AdminLayout";
 
 // Auth
 import AuthPage from "@/pages/AuthPage";
+import CompanySignupPage from "@/pages/CompanySignupPage";
 
 // Role router
 import RoleDashboard from "@/pages/RoleDashboard";
@@ -72,6 +73,7 @@ const App = () => (
           <Routes>
             {/* Public auth route */}
             <Route path="/auth" element={<AuthRoute><AuthPage /></AuthRoute>} />
+            <Route path="/company/signup" element={<AuthRoute><CompanySignupPage /></AuthRoute>} />
 
             {/* Role router */}
             <Route path="/" element={<ProtectedRoute><RoleDashboard /></ProtectedRoute>} />

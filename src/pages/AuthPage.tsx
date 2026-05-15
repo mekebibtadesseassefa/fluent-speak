@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -97,11 +98,33 @@ export default function AuthPage() {
 
       await supabase.from('user_roles').insert({ user_id: data.user.id, role: selectedRole, is_active: true });
 
+      // Auto-link student/teacher to a company by email domain
+      if (selectedRole === 'student' || selectedRole === 'teacher') {
+        const emailDomain = signupEmail.split('@')[1]?.toLowerCase();
+        if (emailDomain) {
+          const { data: matchedCompany } = await supabase
+            .from('companies')
+            .select('id, name')
+            .contains('email_domains', [emailDomain])
+            .eq('status', 'active')
+            .maybeSingle();
+          if (matchedCompany) {
+            await supabase.from('company_employees').insert({
+              company_id: matchedCompany.id,
+              user_id: data.user.id,
+              active: false,
+            });
+            toast({ title: t('auth.autoLinkedTitle'), description: t('auth.autoLinkedDesc', { company: matchedCompany.name }) });
+          }
+        }
+      }
+
       if (selectedRole === 'company_hr' && companyName) {
         const cleanCnpj = cnpj.replace(/\D/g, '');
         const { data: company } = await supabase.from('companies').insert({
           name: companyName,
           cnpj: cleanCnpj || null,
+          status: 'pending',
         }).select().single();
 
         if (company) {
@@ -212,6 +235,10 @@ export default function AuthPage() {
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? t('auth.creatingAccount') : t('auth.signup')}
                   </Button>
+                  <p className="text-center text-xs text-muted-foreground pt-2">
+                    {t('auth.isCompany')}
+                    <Link to="/company/signup" className="underline text-primary">{t('auth.registerCompany')}</Link>
+                  </p>
                 </form>
               </TabsContent>
             </Tabs>
