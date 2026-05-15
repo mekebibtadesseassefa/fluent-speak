@@ -188,6 +188,7 @@ export type Database = {
           billing_email: string | null
           cnpj: string | null
           created_at: string
+          email_domains: string[]
           employee_limit: number
           id: string
           join_code: string | null
@@ -202,6 +203,7 @@ export type Database = {
           billing_email?: string | null
           cnpj?: string | null
           created_at?: string
+          email_domains?: string[]
           employee_limit?: number
           id?: string
           join_code?: string | null
@@ -216,6 +218,7 @@ export type Database = {
           billing_email?: string | null
           cnpj?: string | null
           created_at?: string
+          email_domains?: string[]
           employee_limit?: number
           id?: string
           join_code?: string | null
