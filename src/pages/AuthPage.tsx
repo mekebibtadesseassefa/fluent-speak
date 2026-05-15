@@ -235,6 +235,10 @@ export default function AuthPage() {
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? t('auth.creatingAccount') : t('auth.signup')}
                   </Button>
+                  <p className="text-center text-xs text-muted-foreground pt-2">
+                    {t('auth.isCompany')}
+                    <Link to="/company/signup" className="underline text-primary">{t('auth.registerCompany')}</Link>
+                  </p>
                 </form>
               </TabsContent>
             </Tabs>
